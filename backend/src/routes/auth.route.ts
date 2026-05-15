@@ -16,10 +16,3 @@ authRouter.post('/register', authController.register);
  * @access Public
  */
 authRouter.post('/login', authController.login);
-
-/**
- * @description Logout a user
- * @route POST /api/auth/logout
- * @access Public
- */
-authRouter.post('/logout', authController.logout);
