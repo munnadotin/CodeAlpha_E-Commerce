@@ -6,20 +6,18 @@ import { productController } from "../controllers/product.controller";
 export const productRouter = Router();
 
 /**
- * @description Upload product images
- * @route POST /api/products/upload
- * @access Public
+ * @description Add product images
+ * @route POST /api/products/create
+ * @access private (only admin)
  */
-productRouter.post("/upload", upload.array("images", 5), authMiddlware, productController.uploadProductImages);
+productRouter.post("/create", upload.array("images", 5), authMiddlware, productController.addProduct);
 
 /**
  * @description Get all products
  * @route GET /api/products
- * @access Public
+ * @access public
  */
-productRouter.get("/", (req, res) => {
-    res.send("Get all products");
-});
+productRouter.get("/", productController.getAllProducts);
 
 /**
  * @description Get product by id
