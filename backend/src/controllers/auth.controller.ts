@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 // Register a new user
 const register = async (req: Request, res: Response) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({
@@ -32,7 +32,8 @@ const register = async (req: Request, res: Response) => {
         const user = await User.create({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword, 
+            role: role || "user"
         });
 
         // return user
@@ -42,7 +43,8 @@ const register = async (req: Request, res: Response) => {
             user: {
                 _id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email, 
+                role: user.role
             }
         });
 
@@ -96,7 +98,8 @@ const login = async (req: Request, res: Response) => {
             user: {
                 _id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role: user.role
             },
             accessToken
         });

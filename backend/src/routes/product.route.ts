@@ -22,36 +22,21 @@ productRouter.get("/", productController.getAllProducts);
 /**
  * @description Get product by id
  * @route GET /api/products/:id
- * @access Public
+ * @access public
  */
-productRouter.get("/:id", (req, res) => {
-    res.send("Get product by id");
-});
-
-/**
- * @description Create a new product
- * @route POST /api/products
- * @access Public
- */
-productRouter.post("/", (req, res) => {
-    res.send("Create a new product");
-});
+productRouter.get("/:id", productController.getProductById);
 
 /**
  * @description Update a product
  * @route PUT /api/products/:id
- * @access Public
+ * @access public
  */
-productRouter.put("/:id", (req, res) => {
-    res.send("Update a product");
-});
+productRouter.patch("/:id", upload.array("images", 5), authMiddlware, productController.updateProduct);
 
 /**
  * @description Delete a product
  * @route DELETE /api/products/:id
- * @access Public
+ * @access public
  */
-productRouter.delete("/:id", (req, res) => {
-    res.send("Delete a product");
-});
+productRouter.delete("/:id", authMiddlware, productController.deleteProduct);
 
