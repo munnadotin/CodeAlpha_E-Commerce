@@ -54,35 +54,44 @@ const addProduct = async (req: Request, res: Response) => {
     } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: error.message
         })
     }
 };
 
-const getAllProducts = async (_req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
     try {
-        const products = await Product.find();
+        const { page = 1, limit = 10 } = req.query;
+
+        // Find products with pagination
+        const products = await Product.find().limit(Number(limit)).skip((Number(page) - 1) * Number(limit));
 
         if (!products || products.length === 0) {
-            return res.status(404).json({
-                success: false,
+            return res.status(200).json({
+                success: true,
                 message: "Products not found",
+                pagination: {
+                    page: Number(page),
+                    limit: Number(limit),
+                    total: 0,
+                },
             });
         }
-
-        // Add pagination, filtering, and sorting
-
-
 
         res.status(200).json({
             success: true,
             message: "Products fetched successfully",
+            pagination: {
+                page: Number(page),
+                limit: Number(limit),
+                total: products.length,
+            },
             data: products,
         })
     } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: error.message
         })
     }
 }
