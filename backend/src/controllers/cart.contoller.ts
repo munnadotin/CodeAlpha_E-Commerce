@@ -81,12 +81,12 @@ const addCartItem = async (req: Request, res: Response) => {
 const updateCartItem = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { quantity } = req.body;
+        const { action } = req.body;
 
-        if (!id || !quantity) {
+        if (!id || !action) {
             return res.status(400).json({
                 success: false,
-                message: "Product ID and quantity are required"
+                message: "Product ID and action are required"
             });
         }
 
@@ -106,12 +106,21 @@ const updateCartItem = async (req: Request, res: Response) => {
             });
         }
 
-        item.quantity = quantity;
-        await cart.save();
+        if (action === "increase") {
+            item.quantity++;
+        } else {
+            if (item.quantity > 1) {
+                item.quantity--;
+            } else {
+                cart.items.pull(item._id);
+            }
+        }
 
+        await cart.save();
         res.status(200).json({
             success: true,
-            message: "Item updated"
+            message: "Item updated",
+            cart
         });
 
     } catch (error) {
@@ -141,20 +150,14 @@ const removeCartItem = async (req: Request, res: Response) => {
             });
         }
 
-        const item = cart.items.find(item => item._id.toString() === id);
-        if (!item) {
-            return res.status(404).json({
-                success: false,
-                message: "Item not found"
-            });
-        }
+        cart.items.pull({ _id: id });
 
-        cart.items = cart.items.filter(item => item._id.toString() !== id);
         await cart.save();
 
         res.status(200).json({
             success: true,
-            message: "Item removed"
+            message: "Item removed from cart",
+            cart
         });
     } catch (error) {
         res.status(500).json({
