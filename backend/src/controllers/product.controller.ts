@@ -41,6 +41,7 @@ const addProduct = async (req: Request, res: Response) => {
             price,
             category,
             stock,
+            createdby: (req as any).user?._id,
             images: results.filter((image): image is { url: string } => !!image && typeof image.url === 'string').map((image) => image.url),
         });
 
@@ -65,6 +66,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 
         // Find products with pagination
         const products = await Product.find().limit(Number(limit)).skip((Number(page) - 1) * Number(limit));
+        const totalProducts = await Product.countDocuments();
 
         if (!products || products.length === 0) {
             return res.status(200).json({
@@ -84,7 +86,8 @@ const getAllProducts = async (req: Request, res: Response) => {
             pagination: {
                 page: Number(page),
                 limit: Number(limit),
-                total: products.length,
+                totalProducts,
+                totalPages: Math.ceil(totalProducts / Number(limit)),
             },
             data: products,
         })
@@ -168,9 +171,19 @@ const updateProduct = async (req: Request, res: Response) => {
 const deleteProduct = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const product = await Product.findByIdAndDelete(id);
 
-        if (!product) {
+        // check ownership
+        const product = await Product.findById(id);
+        if (product?.createdby?.toString() !== (req as any).user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to delete this product",
+            });
+        }
+
+        const deletedProduct = await Product.findByIdAndDelete(id);
+
+        if (!deletedProduct) {
             return res.status(404).json({
                 success: false,
                 message: "Product not found",
@@ -190,10 +203,47 @@ const deleteProduct = async (req: Request, res: Response) => {
     }
 };
 
+const searchProducts = async (req: Request, res: Response) => {
+    try {
+        const { query } = req.query;
+        const products = await Product.find({
+            $or: [
+                {"name": {$regex: query as string, $options: "i"}},
+                {"description": {$regex: query as string, $options: "i"}},
+                {"category": {$regex: query as string, $options: "i"}},
+            ]
+        });
+
+        // Add pagination
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const skip = (page - 1) * limit;
+        const productsWithPagination = products.slice(skip, skip + limit);
+
+        res.status(200).json({
+            success: true,
+            message: "Products fetched successfully",
+            data: productsWithPagination,
+            pagination: {
+                page,
+                limit,
+                total: products.length,
+                totalPages: Math.ceil(products.length / limit)
+            }
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+};
+
 export const productController = {
     addProduct,
     getAllProducts,
     getProductById,
-    updateProduct, 
-    deleteProduct
+    updateProduct,
+    deleteProduct,
+    searchProducts
 };

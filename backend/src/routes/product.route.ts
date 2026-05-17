@@ -20,6 +20,13 @@ productRouter.post("/create", upload.array("images", 5), authMiddlware, productC
 productRouter.get("/", productController.getAllProducts);
 
 /**
+ * @description Search products
+ * @route GET /api/products/search
+ * @access public
+ */
+productRouter.get("/search", productController.searchProducts);
+
+/**
  * @description Get product by id
  * @route GET /api/products/:id
  * @access public
@@ -29,14 +36,14 @@ productRouter.get("/:id", productController.getProductById);
 /**
  * @description Update a product
  * @route PUT /api/products/:id
- * @access public
+ * @access public (only admin)
  */
 productRouter.patch("/:id", upload.array("images", 5), authMiddlware, productController.updateProduct);
 
 /**
  * @description Delete a product
  * @route DELETE /api/products/:id
- * @access public
+ * @access public (only admin)
  */
 productRouter.delete("/:id", authMiddlware, productController.deleteProduct);
 

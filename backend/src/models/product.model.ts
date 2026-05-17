@@ -7,22 +7,18 @@ const productSchema = new mongoose.Schema(
             required: [true, "Name is required"],
             trim: true,
         },
-
         description: {
             type: String,
             required: [true, "Description is required"],
         },
-
         price: {
             type: Number,
             required: [true, "Price is required"],
         },
-
         category: {
             type: String,
             required: [true, "Category is required"],
         },
-
         images: {
             type: [{
                 type: String,
@@ -35,15 +31,17 @@ const productSchema = new mongoose.Schema(
                 message: "At least one image is required",
             },
         },
-
         stock: {
             type: Number,
             default: 1,
         },
-
         ratings: {
             type: Number,
             default: 0,
+        },
+        createdby: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
         },
     },
     {
