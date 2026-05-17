@@ -2,6 +2,7 @@ import express from "express";
 import { authRouter } from "./routes/auth.route";
 import { productRouter } from "./routes/product.route";
 import { cartRouter } from "./routes/cart.route";
+import { orderRouter } from "./routes/order.route";
 
 export const app = express();
 
@@ -30,3 +31,10 @@ app.use("/api/products", productRouter);
  * @access private
  */
 app.use("/api/cart", cartRouter);
+
+/**
+ * Routes - Order
+ * @route /api/orders
+ * @access private
+ */
+app.use("/api/orders", orderRouter);
