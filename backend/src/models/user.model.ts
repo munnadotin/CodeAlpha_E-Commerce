@@ -20,7 +20,16 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String, 
         enum: ["user", "admin"],
         default: "user"
-    }
+    }, 
+    address: [
+        {
+            street: String,
+            city: String,
+            state: String,
+            zipCode: String,
+            country: String
+        }
+    ]
 }, {
     timestamps: true
 });

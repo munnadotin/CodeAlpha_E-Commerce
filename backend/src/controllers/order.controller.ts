@@ -5,7 +5,15 @@ import { IProduct } from "../types/product.type";
 
 const createOrder = async (req: Request, res: Response) => {
     try {
-        const { paymentMethod, shippingAddress } = req.body;
+        const { paymentMethod } = req.body;
+
+        if(!paymentMethod) {
+            return res.status(400).json({
+                success: false,
+                message: "Payment method is required"
+            })
+        }
+
         const cartItems = await Cart.findOne({ user: (req as any).user._id }).populate("items.product");
 
         if (!cartItems) {
@@ -34,9 +42,14 @@ const createOrder = async (req: Request, res: Response) => {
             total: totalPrice,
             user: (req as any).user._id,
             paymentMethod,
-            shippingAddress,
+            shippingAddress: (req as any)?.user?.address[0],
         })
 
+        res.status(201).json({
+            success: true,
+            message: "Order created successfully",
+            data: order
+        })
     } catch (error) {
         res.status(500).json({
             success: false,
