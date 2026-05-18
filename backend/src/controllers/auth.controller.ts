@@ -112,10 +112,10 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
-// update user
-const updateUser = async (req: Request, res: Response) => {
+// add address
+const addAddress = async (req: Request, res: Response) => {
     try {
-        const { name, street, city, state, zipCode, country } = req.body;
+        const { street, city, state, zipCode, country } = req.body;
 
         const userId = (req as any).user._id;
 
@@ -128,19 +128,13 @@ const updateUser = async (req: Request, res: Response) => {
             });
         }
 
-        // update user
-        if (name) {
-            user.name = name;
-        }
-        user.address = [
-            {
-                street,
-                city,
-                state,
-                zipCode,
-                country
-            }
-        ];
+        user.address.push({
+            street,
+            city,
+            state,
+            zipCode,
+            country
+        });
 
         // save user
         await user.save();
@@ -148,7 +142,96 @@ const updateUser = async (req: Request, res: Response) => {
         // return user
         res.status(200).json({
             success: true,
-            message: "User updated successfully",
+            message: "Address added successfully",
+            user
+        });
+
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+// update address
+const updateAddress = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { street, city, state, zipCode, country } = req.body;
+
+        const user = await User.findById((req as any).user._id);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const address = user.address.find((addr: any) => addr._id.toString() === id);
+
+        if (!address) {
+            return res.status(404).json({
+                success: false,
+                message: "Address not found"
+            });
+        }
+
+        address.street = street;
+        address.city = city;
+        address.state = state;
+        address.zipCode = zipCode;
+        address.country = country;
+
+        // save user
+        await user.save();
+
+        // return user
+        res.status(200).json({
+            success: true,
+            message: "Address updated successfully",
+            user
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+// delete address
+const deleteAddress = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        const user = await User.findById((req as any).user._id);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const address = user.address.find((addr: any) => addr._id.toString() === id);
+        if (!address) {
+            return res.status(404).json({
+                success: false,
+                message: "Address not found"
+            });
+        }
+
+        user.address = user.address.filter((addr: any) => addr._id.toString() !== id);
+
+        // save user
+        await user.save();
+
+        // return user
+        res.status(200).json({
+            success: true,
+            message: "Address deleted successfully",
             user
         });
 
@@ -163,5 +246,7 @@ const updateUser = async (req: Request, res: Response) => {
 export const authController = {
     register,
     login,
-    updateUser
+    addAddress,
+    updateAddress,
+    deleteAddress
 }

@@ -7,21 +7,34 @@ export const authRouter = Router();
 /**
  * @description Register a new user
  * @route POST /api/auth/register
- * @access Public
+ * @access public
  */
 authRouter.post('/register', authController.register);
 
 /***
  * @description Login a user
  * @route POST /api/auth/login
- * @access Public
+ * @access public
  */
 authRouter.post('/login', authController.login);
 
 /**
- * @description Update user
- * @route PATCH /api/auth/update
- * @access Private
+ * @description Add address
+ * @route POST /api/auth/add-address
+ * @access private
  */
-authRouter.patch('/update', authMiddlware, authController.updateUser);
+authRouter.post('/add-address', authMiddlware, authController.addAddress);
 
+/**
+ * @description Update address
+ * @route PATCH /api/auth/update-address/:id
+ * @access private
+ */
+authRouter.patch('/update-address/:id', authMiddlware, authController.updateAddress);
+
+/**
+ * @description Delete address
+ * @route DELETE /api/auth/delete-address/:id
+ * @access private
+ */
+authRouter.delete('/delete-address/:id', authMiddlware, authController.deleteAddress);

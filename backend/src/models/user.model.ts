@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import type { IUser } from "../types/user.types.";
 
+const addressSchema = new mongoose.Schema({
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: String
+});
+
 const userSchema = new mongoose.Schema<IUser>({
     name: {
         type: String,
@@ -21,15 +29,7 @@ const userSchema = new mongoose.Schema<IUser>({
         enum: ["user", "admin"],
         default: "user"
     }, 
-    address: [
-        {
-            street: String,
-            city: String,
-            state: String,
-            zipCode: String,
-            country: String
-        }
-    ]
+    address: [addressSchema]
 }, {
     timestamps: true
 });
