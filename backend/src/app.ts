@@ -3,6 +3,7 @@ import { authRouter } from "./routes/auth.route";
 import { productRouter } from "./routes/product.route";
 import { cartRouter } from "./routes/cart.route";
 import { orderRouter } from "./routes/order.route";
+import { paymentRouter } from "./routes/payment.route";
 
 export const app = express();
 
@@ -38,3 +39,10 @@ app.use("/api/cart", cartRouter);
  * @access private
  */
 app.use("/api/orders", orderRouter);
+
+/**
+ * Routes - Payment
+ * @route /api/payments
+ * @access private
+ */
+app.use("/api/payments", paymentRouter);
