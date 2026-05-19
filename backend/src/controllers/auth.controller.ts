@@ -178,11 +178,11 @@ const updateAddress = async (req: Request, res: Response) => {
             });
         }
 
-        address.street = street;
-        address.city = city;
-        address.state = state;
-        address.zipCode = zipCode;
-        address.country = country;
+        address.street = street || address.street;
+        address.city = city || address.city;
+        address.state = state || address.state;
+        address.zipCode = zipCode || address.zipCode;
+        address.country = country || address.country;
 
         // save user
         await user.save();

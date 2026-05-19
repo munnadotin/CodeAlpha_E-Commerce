@@ -7,7 +7,7 @@ const createOrder = async (req: Request, res: Response) => {
     try {
         const { paymentMethod } = req.body;
 
-        if(!paymentMethod) {
+        if (!paymentMethod) {
             return res.status(400).json({
                 success: false,
                 message: "Payment method is required"
@@ -45,6 +45,9 @@ const createOrder = async (req: Request, res: Response) => {
             shippingAddress: (req as any)?.user?.address[0],
         })
 
+        // clear cart
+        await Cart.updateOne({}, { $set: { items: [] } });
+
         res.status(201).json({
             success: true,
             message: "Order created successfully",
@@ -60,7 +63,13 @@ const createOrder = async (req: Request, res: Response) => {
 
 const getOrders = async (req: Request, res: Response) => {
     try {
+        const orders = await Order.find({ user: (req as any).user._id });
 
+        res.status(200).json({
+            success: true,
+            message: "Orders fetched successfully",
+            data: orders
+        })
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -71,7 +80,20 @@ const getOrders = async (req: Request, res: Response) => {
 
 const getOrderById = async (req: Request, res: Response) => {
     try {
+        const order = await Order.findById(req.params.id);
 
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully",
+            data: order
+        })
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -82,7 +104,27 @@ const getOrderById = async (req: Request, res: Response) => {
 
 const updateOrder = async (req: Request, res: Response) => {
     try {
-
+        const orderId = req.params.id;
+        const { status, paymentStatus } = req.body;
+        
+        const order = await Order.findById(orderId);
+        
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            })
+        }
+        
+        order.status = status || order.status;
+        order.paymentStatus = paymentStatus || order.paymentStatus;
+        await order.save();
+        
+        res.status(200).json({
+            success: true,
+            message: "Order updated successfully",
+            data: order
+        })
     } catch (error) {
         res.status(500).json({
             success: false,
