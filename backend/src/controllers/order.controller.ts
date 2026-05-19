@@ -119,11 +119,28 @@ const updateOrder = async (req: Request, res: Response) => {
         order.status = status || order.status;
         order.paymentStatus = paymentStatus || order.paymentStatus;
         await order.save();
-        
+
         res.status(200).json({
             success: true,
             message: "Order updated successfully",
             data: order
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : "Internal server error"
+        })
+    }
+}
+
+const getAllOrders = async (req: Request, res: Response) => {
+    try {
+        const orders = await Order.find();
+
+        res.status(200).json({
+            success: true,
+            message: "Orders fetched successfully",
+            data: orders
         })
     } catch (error) {
         res.status(500).json({
@@ -138,5 +155,6 @@ export const orderController = {
     getOrders,
     getOrderById,
     updateOrder,
+    getAllOrders
 }
 
