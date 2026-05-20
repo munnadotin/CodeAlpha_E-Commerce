@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Navbar = () => {
   return (
     <>
-      {/* Desktop Navbar - Sticky Top */}
+      {/* Desktop Navbar*/}
       <div className="hidden md:block w-full sticky top-0 z-50 border-b border-slate-300 bg-white shadow-xs">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 md:gap-12 p-4">
           {/* Logo */}
