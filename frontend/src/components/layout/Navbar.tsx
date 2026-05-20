@@ -1,8 +1,9 @@
 import { Handbag, HomeIcon, Search, User2 } from 'lucide-react';
 import '../../App.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate()
   return (
     <>
       {/* Desktop Navbar*/}
@@ -27,11 +28,11 @@ const Navbar = () => {
 
           {/* action */}
           <div className="relative flex items-center gap-4">
-            <button type='button' className='p-2 border border-slate-300 rounded-md shadow-xs cursor-pointer relative'>
+            <button onClick={() => navigate('/cart')} type='button' className='p-2 border border-slate-300 rounded-md shadow-xs cursor-pointer relative'>
               <Handbag strokeWidth={1.5} className='h-5 w-5' />
               <div className='absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>3</div>
             </button>
-            <button className='flex items-center gap-2 px-4 py-1.5 border border-slate-300 rounded-md shadow-xs cursor-pointer'>
+            <button onClick={() => navigate('/login')} className='flex items-center gap-2 px-4 py-1.5 border border-slate-300 rounded-md shadow-xs cursor-pointer'>
               <User2 strokeWidth={1.5} className='h-5 w-5' /> <span className='hidden lg:block'>Sign In / Register</span>
             </button>
           </div>
@@ -61,7 +62,7 @@ const Navbar = () => {
           </button>
 
           {/* Profile */}
-          <button className="flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900">
+          <button onClick={() => navigate('/login')} className="flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900">
             <User2 strokeWidth={1.5} className='h-5 w-5' />
             <span className="text-xs">Profile</span>
           </button>
