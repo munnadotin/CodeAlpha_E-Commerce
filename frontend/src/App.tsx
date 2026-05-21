@@ -8,10 +8,12 @@ import ProudectedRoute from "./routes/ProtectedRoute"
 import PublicRoute from "./routes/PublicRoute"
 import Ordres from "./pages/admin/Ordres"
 import Profile from "./pages/Profile"
+import { Toaster } from "react-hot-toast"
 
 function App() {
   return (
     <>
+      <Toaster position="top-right" />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/admin" element={

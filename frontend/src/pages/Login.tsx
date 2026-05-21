@@ -1,23 +1,17 @@
 import { useForm } from "react-hook-form"
 import type { LoginCredentials } from "../types/auth.type";
 import { Link } from "react-router-dom";
-import api from "../services/axiosInstance";
-import { useDispatch } from "react-redux";
-import { setCredentials } from "../features/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../app/store";
+import { loginThunk } from "../api/authThunk";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>();
-  const dispatch = useDispatch();
-  
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading } = useSelector((state: RootState) => state.auth);
+
   const onsubmit = async (data: LoginCredentials) => {
-    try {
-      console.log(data)
-      const res = await api.post("/auth/login", data);
-      console.log(res)
-      dispatch(setCredentials(res.data))
-    } catch (error) {
-      console.log(error)
-    }
+    await dispatch(loginThunk(data));
   }
 
   return (
@@ -78,12 +72,21 @@ const Login = () => {
             </div>
 
             {/* Login Button */}
-            <button
-              type="submit"
-              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
-            >
-              Sign In
-            </button>
+            {loading ? (
+              <button
+                type="submit"
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
+              >
+                Signing in...
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
+              >
+                Sign In
+              </button>
+            )}
 
             {/* Divider */}
             <div className="relative my-6">

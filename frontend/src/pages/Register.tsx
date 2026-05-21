@@ -1,12 +1,19 @@
 import { useForm } from "react-hook-form"
 import type { RegisterCredentials } from "../types/auth.type"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../app/store";
+import { registerThunk } from "../api/authThunk";
 
 function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterCredentials>();
+  const { loading } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-  const onsubmit = (data: RegisterCredentials) => {
-    console.log(data);
+  const onsubmit = async (data: RegisterCredentials) => {
+    await dispatch(registerThunk(data));
+    navigate("/login");
   }
   return (
     <div className="min-h-screen flex items-center justify-center py-10 px-4">
@@ -96,7 +103,7 @@ function Register() {
               type="submit"
               className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
             >
-              Sign In
+              {loading ? "Signing up..." : "Sign Up"}
             </button>
 
             {/* Divider */}
