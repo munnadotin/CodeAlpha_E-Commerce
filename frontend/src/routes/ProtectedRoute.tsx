@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "../app/store";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-export default function ProudectedRoute({ allowedRoles, children }: { allowedRoles: string[]; children: React.ReactNode }) {
+export default function ProudectedRoute({ allowedRoles }: { allowedRoles: string[] }) {
     const { user, token } = useSelector((state: RootState) => state.auth);
 
     if (!token) {
@@ -13,5 +13,5 @@ export default function ProudectedRoute({ allowedRoles, children }: { allowedRol
         return <Navigate to={'/'} />
     }
 
-    return children;
+    return <Outlet />;
 }

@@ -5,6 +5,9 @@ import Register from "./pages/Register"
 import Layout from "./pages/Layout"
 import Cart from "./pages/Cart"
 import ProudectedRoute from "./routes/ProtectedRoute"
+import PublicRoute from "./routes/PublicRoute"
+import Ordres from "./pages/admin/Ordres"
+import Profile from "./pages/Profile"
 
 function App() {
   return (
@@ -12,14 +15,21 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/admin" element={
-            <ProudectedRoute allowedRoles={['admin']}>
-              <div>Admin</div>
-            </ProudectedRoute>
-          } />
-          <Route index path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/cart" element={<Cart />} />
+            <ProudectedRoute allowedRoles={['admin']} />
+          }>
+            <Route path="ordres" element={<Ordres />} />
+          </Route>
+          <Route element={<PublicRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+          <Route element={<ProudectedRoute allowedRoles={["user"]} />}>
+            <Route index path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+          </Route>
+          <Route element={<ProudectedRoute allowedRoles={["user", "admin"]} />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
         </Route>
       </Routes>
     </>
