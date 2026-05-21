@@ -4,6 +4,7 @@ import { productRouter } from "./routes/product.route";
 import { cartRouter } from "./routes/cart.route";
 import { orderRouter } from "./routes/order.route";
 import { paymentRouter } from "./routes/payment.route";
+import cors from "cors";
 
 export const app = express();
 
@@ -11,6 +12,10 @@ export const app = express();
  * Middleware
  */
 app.use(express.json());
+app.use(cors({
+    origin: process.env.CLIENT_URL, 
+    credentials: true
+}))
 
 /**
  * Routes - Authentication

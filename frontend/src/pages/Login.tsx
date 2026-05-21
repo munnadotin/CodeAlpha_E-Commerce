@@ -1,12 +1,23 @@
 import { useForm } from "react-hook-form"
 import type { LoginCredentials } from "../types/auth.type";
 import { Link } from "react-router-dom";
+import api from "../services/axiosInstance";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../features/authSlice";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>();
-
-  const onsubmit = (data: LoginCredentials) => {
-    console.log(data);
+  const dispatch = useDispatch();
+  
+  const onsubmit = async (data: LoginCredentials) => {
+    try {
+      console.log(data)
+      const res = await api.post("/auth/login", data);
+      console.log(res)
+      dispatch(setCredentials(res.data))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
