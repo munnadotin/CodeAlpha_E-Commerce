@@ -1,42 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import type { AppDispatch, RootState } from '../app/store';
+import { productByIdThunk } from '../api/productThunk';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, productDetails } = useSelector((state: RootState) => state.products);
 
-  // Sample product (replace with API call)
-  const product = {
-    _id: "6a080210afb5b7b5d190a5d7",
-    name: "BERIBES Bluetooth Headphones Over Ear, 65H Playtime and 6 EQ Music Modes Wireless Headphones with Microphone",
-    price: 999,
-    category: "electronics",
-    description: "65 Hours Playtime: Low power consumption technology applied, BERIBES bluetooth headphones with built-in 500mAh battery can continually play more than 65 hours...",
-    images: [
-      "https://ik.imagekit.io/xynzv73qi/71F2ccIPPLL._AC_SL1500__3JjetYQCX.jpg",
-      "https://ik.imagekit.io/xynzv73qi/71JO-hF-X3L._AC_SL1500__3Cdk0GD7a.jpg",
-      "https://ik.imagekit.io/xynzv73qi/71lf8pXs7ZL._AC_SL1500__5AKaHYW-4.jpg"
-    ],
-    stock: 40,
-    ratings: 4.5
-  };
+  useEffect(() => {
+    dispatch(productByIdThunk(id!));
+  }, [id])
+
+  console.log(productDetails);
+  if (!productDetails) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        
+
         {/* Product Images */}
         <div>
           <div className="bg-white rounded-2xl overflow-hidden mb-4 shadow-sm">
-            <img 
-              src={product.images[selectedImage]} 
-              alt={product.name}
-              className="w-full h-auto object-cover"
+            <img
+              src={productDetails?.images[selectedImage]}
+              alt={productDetails?.name}
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="grid grid-cols-4 gap-3">
-            {product.images.map((img, idx) => (
+            {productDetails?.images.map((img, idx) => (
               <button
                 key={idx}
                 onClick={() => setSelectedImage(idx)}
@@ -50,48 +48,47 @@ const ProductDetail = () => {
 
         {/* Product Info */}
         <div>
-          <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">{product.category}</p>
-          <h1 className="text-3xl font-semibold text-gray-900 mb-4">{product.name}</h1>
-          
+          <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">{productDetails?.category}</p>
+          <h1 className="text-3xl font-semibold text-gray-900 mb-4">{productDetails?.name}</h1>
+
           {/* Rating */}
           <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
                 <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                 </svg>
               ))}
             </div>
-            <span className="text-sm text-gray-500">({product.ratings} reviews)</span>
             <span className="text-green-600 text-sm font-medium">In Stock</span>
           </div>
 
           {/* Price */}
           <div className="mb-6">
-            <span className="text-4xl font-bold text-gray-900">₹{product.price}</span>
-            <span className="text-lg text-gray-400 line-through ml-2">₹{Math.round(product.price * 1.25)}</span>
+            <span className="text-4xl font-bold text-gray-900">₹{productDetails?.price}</span>
+            <span className="text-lg text-gray-400 line-through ml-2">₹{Math.round(productDetails?.price * 1.25)}</span>
             <span className="text-green-600 text-sm ml-2">Save 25%</span>
           </div>
 
           {/* Description */}
           <div className="mb-6">
             <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
+            <p className="text-gray-600 text-sm leading-relaxed">{productDetails?.description}</p>
           </div>
 
           {/* Quantity */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
             <div className="flex items-center gap-3 border border-gray-200 rounded-lg w-32">
-              <button 
+              <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 className="flex-1 py-2 hover:bg-gray-50 transition-colors"
               >
                 -
               </button>
               <span className="flex-1 text-center font-medium">{quantity}</span>
-              <button 
-                onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+              <button
+                onClick={() => setQuantity(Math.min(productDetails?.stock || 0, quantity + 1))}
                 className="flex-1 py-2 hover:bg-gray-50 transition-colors"
               >
                 +

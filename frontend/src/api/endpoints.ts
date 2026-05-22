@@ -8,6 +8,6 @@ export const ENDPOINTS = {
     },
     PRODUCTS: {
         ALL: "/products",
-        BY_ID: "/products/",
+        BY_ID: "/products",
     }
 };

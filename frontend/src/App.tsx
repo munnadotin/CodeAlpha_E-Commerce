@@ -9,6 +9,7 @@ import PublicRoute from "./routes/PublicRoute"
 import Ordres from "./pages/admin/Ordres"
 import Profile from "./pages/Profile"
 import { Toaster } from "react-hot-toast"
+import ProductDetail from "./components/ProductDetails"
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route element={<ProudectedRoute allowedRoles={["user"]} />}>
             <Route index path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
           </Route>
           <Route element={<ProudectedRoute allowedRoles={["user", "admin"]} />}>
             <Route path="/profile" element={<Profile />} />

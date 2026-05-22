@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
 
     return (
         <div
-            className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
+            className="group relative border border-slate-300 rounded-2xl overflow-hidden shadow-sm transition-all duration-500"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -26,9 +26,9 @@ const ProductCard = ({ product }) => {
 
                 {/* Quick View Button */}
                 <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-                    <button className="bg-white text-gray-900 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-900 hover:text-white transition-all transform translate-y-2 group-hover:translate-y-0">
+                    <Link to={`/product/${product._id}`} className="bg-white text-gray-900 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-900 hover:text-white transition-all transform translate-y-2 group-hover:translate-y-0 cursor-pointer">
                         Quick View
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Image Navigation Dots */}
@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
                         <button
                             key={idx}
                             onClick={() => setCurrentImage(idx)}
-                            className={`w-1.5 h-1.5 rounded-full transition-all ${currentImage === idx ? 'bg-white w-3' : 'bg-white/50'}`}
+                            className={`w-1.5 h-1.5 rounded-full transition-all ${currentImage === idx ? 'bg-white w-3' : 'bg-white/50'} cursor-pointer`}
                         />
                     ))}
                 </div>

@@ -2,12 +2,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../app/store';
+import { productThunk } from '../api/productThunk';
 // import ProductCard from '../components/ProductCard';
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, loading } = useSelector((state: RootState) => state.products);
   const [trending, setTrending] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('all');
 
   // Sample product data (replace with API call)
@@ -28,15 +31,13 @@ const Home = () => {
   ];
 
   useEffect(() => {
-    // Fetch products from API
-    setProducts(sampleProducts);
-    setTrending(sampleProducts.slice(0, 4));
-    setLoading(false);
+    dispatch(productThunk());
   }, []);
+
+  console.log(products);
 
   return (
     <div className="min-h-screen bg-gray-50">
-
       {/* Hero Section */}
       <section className="relative text-gray-900 overflow-hidden">
         {/* Abstract minimal shapes */}
@@ -73,10 +74,10 @@ const Home = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4 pt-4">
-                <button className="group relative px-8 py-3.5 bg-gray-900 text-white text-sm font-medium tracking-wide overflow-hidden transition-all hover:bg-gray-800">
+                <button className="group relative px-8 py-3.5 bg-gray-900 text-white text-sm font-medium tracking-wide overflow-hidden transition-all hover:bg-gray-800 cursor-pointer">
                   <span className="relative z-10">Explore Collection</span>
                 </button>
-                <button className="px-8 py-3.5 border border-gray-200 text-sm font-medium tracking-wide text-gray-700 transition-all hover:border-gray-400 hover:text-gray-900">
+                <button className="px-8 py-3.5 border border-gray-200 text-sm font-medium tracking-wide text-gray-700 transition-all hover:border-gray-400 hover:text-gray-900 cursor-pointer">
                   View Lookbook
                 </button>
               </div>
@@ -146,7 +147,7 @@ const Home = () => {
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900">🔥 Trending <span className="font-semibold">Now</span></h2>
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900">Trending <span className="font-semibold">Now</span></h2>
             <p className="text-gray-500 mt-2">Most popular products this week</p>
           </div>
           <Link to="/trending" className="text-gray-600 hover:text-gray-900 font-medium flex items-center gap-1 group">
@@ -172,7 +173,7 @@ const Home = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {trending.map((product) => (
+            {products.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
