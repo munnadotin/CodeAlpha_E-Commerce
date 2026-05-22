@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { LoginCredentials, RegisterCredentials } from "../types/auth.type";
 import { loginUser, registerUser } from "../services/auth.service";
-import { ENDPOINTS } from "./endPoints";
+import { ENDPOINTS } from "./endpoints";
 import toast from "react-hot-toast";
 
 export const loginThunk = createAsyncThunk(ENDPOINTS.AUTH.LOGIN, async (data: LoginCredentials, thunkAPI) => {

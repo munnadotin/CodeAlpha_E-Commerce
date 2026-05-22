@@ -1,4 +1,17 @@
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDispatch, RootState } from "../app/store";
+import { useEffect } from "react";
+import { productThunk } from "../api/productThunk";
+
 export default function Home() {
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading, products, pagination } = useSelector((state: RootState) => state.products);
+
+    useEffect(() => {
+        dispatch(productThunk());
+    }, [])
+
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">

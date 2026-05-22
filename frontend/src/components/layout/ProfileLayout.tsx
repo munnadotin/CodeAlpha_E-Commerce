@@ -31,7 +31,7 @@ const ProfileLayout = () => {
                     {/* Content */}
                     <div className="lg:col-span-3">
                         {activeTab === 'profile' && <ProfileContent user={user} />}
-                        {activeTab === 'orders' && <OrderContent />}
+                        {activeTab === 'my orders' && <OrderContent />}
                     </div>
                 </div>
             </div>

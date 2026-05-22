@@ -6,14 +6,8 @@ export const ENDPOINTS = {
         UPDATE_ADDRESS: "/auth/address",
         DELETE_ADDRESS: "/auth/address",
     },
-
-    USER: {
-        PROFILE: "/profile",
-        ADDRESS: "/address",
-    },
-
-    ADMIN: {
-        USERS: "/admin/users",
-        DASHBOARD: "/admin/dashboard",
-    },
+    PRODUCTS: {
+        ALL: "/products",
+        BY_ID: "/products/",
+    }
 };

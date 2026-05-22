@@ -1,5 +1,5 @@
 import apiRequest from "../api/apiRequest"
-import { ENDPOINTS } from "../api/endPoints"
+import { ENDPOINTS } from "../api/endpoints";
 import type { LoginCredentials, RegisterCredentials } from "../types/auth.type"
 
 export const loginUser = async (data: LoginCredentials) => {
