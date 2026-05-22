@@ -34,77 +34,83 @@ const Home = () => {
     setLoading(false);
   }, []);
 
-  const categories = ['all', 'electronics', 'fashion', 'home', 'beauty'];
-
   return (
     <div className="min-h-screen bg-gray-50">
-      
-      {/* Hero Section - Attention Grabbing */}
-      <section className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/50 z-10"></div>
-        <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-            alt="Hero background"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        
-        <div className="relative z-20 max-w-7xl mx-auto px-4 py-24 md:py-32">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              <span className="text-xs font-medium">Summer Sale Live</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              Upgrade Your<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-                Style Game
-              </span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-gray-200 mb-8">
-              Discover the latest trends with up to 70% off on electronics, fashion & more
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/shop" className="inline-flex items-center justify-center px-8 py-3 bg-white text-gray-900 rounded-full font-semibold hover:bg-gray-100 transition-all transform hover:scale-105">
-                Shop Now
-                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link to="/deals" className="inline-flex items-center justify-center px-8 py-3 bg-transparent border border-white text-white rounded-full font-semibold hover:bg-white/10 transition-all">
-                View Deals
-              </Link>
-            </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-white/20">
-              <div>
-                <div className="text-2xl font-bold">50K+</div>
-                <div className="text-xs text-gray-300">Happy Customers</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold">1000+</div>
-                <div className="text-xs text-gray-300">Products</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold">24/7</div>
-                <div className="text-xs text-gray-300">Support</div>
-              </div>
-            </div>
-          </div>
+      {/* Hero Section */}
+      <section className="relative text-gray-900 overflow-hidden">
+        {/* Abstract minimal shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gray-100 rounded-full blur-3xl opacity-60"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gray-100 rounded-full blur-3xl opacity-60"></div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-2 bg-white rounded-full mt-2 animate-pulse"></div>
+        {/* Subtle overlay pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_80%_50%_at_50%_50%,black_40%,transparent_100%)]"></div>
+
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-15 lg:py-32">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left content */}
+            <div className="space-y-8">
+              {/* Premium badge */}
+              <div className="inline-flex items-center gap-2">
+                <span className="w-8 h-px bg-gray-300"></span>
+                <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
+                  Limited Edition
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h1 className="text-5xl lg:text-7xl font-light leading-[1.1] tracking-tight">
+                Define Your
+                <span className="block font-semibold mt-2">Personal Aesthetic</span>
+              </h1>
+
+              {/* Description */}
+              <p className="text-lg text-gray-500 leading-relaxed max-w-md">
+                Curated collections from the world's finest brands. Where craftsmanship meets contemporary design.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap gap-4 pt-4">
+                <button className="group relative px-8 py-3.5 bg-gray-900 text-white text-sm font-medium tracking-wide overflow-hidden transition-all hover:bg-gray-800">
+                  <span className="relative z-10">Explore Collection</span>
+                </button>
+                <button className="px-8 py-3.5 border border-gray-200 text-sm font-medium tracking-wide text-gray-700 transition-all hover:border-gray-400 hover:text-gray-900">
+                  View Lookbook
+                </button>
+              </div>
+
+              {/* Refined stats */}
+              <div className="flex gap-12 pt-8">
+                <div>
+                  <div className="text-2xl font-semibold tracking-tight">200+</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Designers</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-semibold tracking-tight">15k</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Clients</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-semibold tracking-tight">28</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Countries</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right image area */}
+            <div className="relative lg:pl-8">
+              <div className="relative aspect-4/5 overflow-hidden bg-gray-50">
+                <img
+                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                  alt="Premium collection"
+                  className="w-full h-full object-cover grayscale-15"
+                />
+                {/* Minimalist frame accent */}
+                <div className="absolute inset-0 border border-white/20 pointer-events-none"></div>
+              </div>
+              <div className="absolute -bottom-3 -right-3 w-24 h-24 bg-slate-50 lg:block"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -144,7 +150,7 @@ const Home = () => {
             <p className="text-gray-500 mt-2">Most popular products this week</p>
           </div>
           <Link to="/trending" className="text-gray-600 hover:text-gray-900 font-medium flex items-center gap-1 group">
-            View All 
+            View All
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -184,7 +190,7 @@ const Home = () => {
             </div>
             <h3 className="text-3xl md:text-5xl font-bold mb-4">Up to 70% Off</h3>
             <p className="text-lg mb-6">Limited time offer on selected items</p>
-            
+
             {/* Countdown Timer */}
             <div className="flex justify-center gap-4 mb-8">
               {[
@@ -199,7 +205,7 @@ const Home = () => {
                 </div>
               ))}
             </div>
-            
+
             <Link to="/flash-sale" className="inline-flex items-center gap-2 bg-white text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all">
               Grab Deals Now
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,4 +1,3 @@
-// pages/ProductDetail.jsx
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
