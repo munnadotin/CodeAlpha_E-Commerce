@@ -3,6 +3,15 @@ export interface User {
     name: string;
     email: string;
     role: "admin" | "user";
+    address: address[]
+}
+
+export interface address {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
 }
 
 export interface LoginCredentials {
