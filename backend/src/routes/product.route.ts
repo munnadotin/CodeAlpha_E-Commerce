@@ -16,6 +16,13 @@ export const productRouter = Router();
  */
 productRouter.get("/categories", categroyController.getCategories);
 
+/** 
+ * @description Get products by category
+ * @route GET /api/products/categories/:cat
+ * @access public
+ */
+productRouter.get("/categories/:cat", productController.getProductsByCategory);
+
 /**
  * @description Create a new category
  * @route POST /api/products/categories
@@ -47,22 +54,22 @@ productRouter.get("/", productController.getAllProducts);
 productRouter.get("/search", productController.searchProducts);
 
 /**
- * @description Get product by id
- * @route GET /api/products/:id
+ * @description Get product by slug
+ * @route GET /api/products/:slug
  * @access public
  */
-productRouter.get("/:id", productController.getProductById);
+productRouter.get("/:slug", productController.getProductBySlug);
 
 /**
  * @description Update a product
- * @route PUT /api/products/:id
+ * @route PUT /api/products/:slug
  * @access public (only admin)
  */
-productRouter.patch("/:id", upload.array("images", 5), authMiddlware, isAdmin(), productController.updateProduct);
+productRouter.patch("/:slug", upload.array("images", 5), authMiddlware, isAdmin(), productController.updateProduct);
 
 /**
  * @description Delete a product
- * @route DELETE /api/products/:id
+ * @route DELETE /api/products/:slug
  * @access public (only admin)
  */
-productRouter.delete("/:id", authMiddlware, isAdmin(), productController.deleteProduct);
+productRouter.delete("/:slug", authMiddlware, isAdmin(), productController.deleteProduct);

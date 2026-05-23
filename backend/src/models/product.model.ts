@@ -7,6 +7,11 @@ const productSchema = new mongoose.Schema(
             required: [true, "Name is required"],
             trim: true,
         },
+        slug: {
+            type: String,
+            required: [true, "Slug is required"],
+            unique: true,
+        },
         description: {
             type: String,
             required: [true, "Description is required"],
@@ -15,8 +20,13 @@ const productSchema = new mongoose.Schema(
             type: Number,
             required: [true, "Price is required"],
         },
+        discount: {
+            type: Number,
+            default: 0,
+        },
         category: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category",
             required: [true, "Category is required"],
         },
         images: {
