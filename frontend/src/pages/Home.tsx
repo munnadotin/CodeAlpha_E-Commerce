@@ -1,37 +1,19 @@
-// pages/Home.jsx
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../app/store';
 import { productThunk } from '../api/productThunk';
-// import ProductCard from '../components/ProductCard';
+import { categoryThunk } from '../api/categoryThunk';
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { products, loading } = useSelector((state: RootState) => state.products);
-  const [trending, setTrending] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('all');
-
-  // Sample product data (replace with API call)
-  const sampleProducts = [
-    {
-      _id: "6a080210afb5b7b5d190a5d7",
-      name: "BERIBES Bluetooth Headphones Over Ear, 65H Playtime and 6 EQ Music Modes Wireless Headphones with Microphone",
-      price: 999,
-      category: "electronics",
-      images: [
-        "https://ik.imagekit.io/xynzv73qi/71F2ccIPPLL._AC_SL1500__3JjetYQCX.jpg",
-        "https://ik.imagekit.io/xynzv73qi/71JO-hF-X3L._AC_SL1500__3Cdk0GD7a.jpg",
-        "https://ik.imagekit.io/xynzv73qi/71lf8pXs7ZL._AC_SL1500__5AKaHYW-4.jpg"
-      ],
-      stock: 40,
-      ratings: 4.5
-    }
-  ];
+  const { categories } = useSelector((state: RootState) => state.categories);
 
   useEffect(() => {
     dispatch(productThunk());
+    dispatch(categoryThunk());
   }, []);
 
   console.log(products);
@@ -49,7 +31,7 @@ const Home = () => {
         {/* Subtle overlay pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_80%_50%_at_50%_50%,black_40%,transparent_100%)]"></div>
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-15 lg:py-32">
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-15 lg:py-22">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left content */}
             <div className="space-y-8">
@@ -117,27 +99,63 @@ const Home = () => {
       </section>
 
       {/* Categories Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-light text-gray-900">Shop by <span className="font-semibold">Category</span></h2>
-          <p className="text-gray-500 mt-2">Explore our curated collections</p>
+      <section className="max-w-7xl mx-auto px-4 py-24">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-3 mb-4">
+            <span className="w-8 h-px bg-gray-300"></span>
+            <span className="text-xs font-medium tracking-wider text-gray-400 uppercase">Curated Selection</span>
+            <span className="w-8 h-px bg-gray-300"></span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-light text-gray-900 tracking-tight">
+            Shop by <span className="font-semibold">Category</span>
+          </h2>
+          <p className="text-gray-400 mt-4 max-w-md mx-auto">
+            Discover excellence through our thoughtfully organized departments
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {[
-            { name: 'Electronics', icon: '💻', color: 'from-blue-500 to-cyan-500', bg: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=500' },
-            { name: 'Fashion', icon: '👕', color: 'from-pink-500 to-rose-500', bg: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=500' },
-            { name: 'Home & Living', icon: '🏠', color: 'from-amber-500 to-orange-500', bg: 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=500' },
-            { name: 'Beauty', icon: '💄', color: 'from-purple-500 to-pink-500', bg: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500' }
-          ].map((category, idx) => (
-            <Link key={idx} to={`/category/${category.name.toLowerCase()}`} className="group relative overflow-hidden rounded-2xl shadow-lg h-48">
-              <img src={category.bg} alt={category.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-80`}></div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <span className="text-5xl mb-2">{category.icon}</span>
-                <h3 className="text-xl font-bold">{category.name}</h3>
-                <p className="text-sm opacity-90">Shop Now →</p>
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {categories.map((category) => (
+            <Link
+              key={category._id}
+              to={`/category/${category.slug}`}
+              className="group relative overflow-hidden bg-gray-50 aspect-4/5 transition-all duration-500"
+            >
+              {/* Image Container */}
+              <div className="absolute inset-0 overflow-hidden">
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+                {/* Subtle overlay */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
+
+              {/* Content Overlay */}
+              <div className="absolute inset-0 flex flex-col items-center justify-end p-6 text-center">
+                {/* Minimalist accent line */}
+                <div className="w-0 h-px bg-white/60 mb-4 transition-all duration-500 group-hover:w-12"></div>
+
+                <h3 className="text-xl font-light tracking-wide text-white mb-1">
+                  {category.name}
+                </h3>
+
+                {/* Subtle shop indicator */}
+                <div className="opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+                  <span className="text-xs tracking-wider text-white/80 uppercase flex items-center gap-1">
+                    Explore
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              {/* Refined border on hover */}
+              <div className="absolute inset-0 border border-white/0 group-hover:border-white/30 transition-all duration-500 pointer-events-none"></div>
             </Link>
           ))}
         </div>
@@ -178,43 +196,6 @@ const Home = () => {
             ))}
           </div>
         )}
-      </section>
-
-      {/* Flash Sale Banner */}
-      <section className="max-w-7xl mx-auto px-4 py-8">
-        <div className="relative bg-gradient-to-r from-red-600 to-orange-600 rounded-3xl overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative z-10 px-8 py-12 md:py-16 text-center text-white">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4">
-              <span className="text-yellow-300">⚡</span>
-              <span className="text-sm font-medium">Flash Sale</span>
-            </div>
-            <h3 className="text-3xl md:text-5xl font-bold mb-4">Up to 70% Off</h3>
-            <p className="text-lg mb-6">Limited time offer on selected items</p>
-
-            {/* Countdown Timer */}
-            <div className="flex justify-center gap-4 mb-8">
-              {[
-                { label: 'Days', value: '12' },
-                { label: 'Hours', value: '08' },
-                { label: 'Minutes', value: '45' },
-                { label: 'Seconds', value: '22' }
-              ].map((item, idx) => (
-                <div key={idx} className="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 min-w-[70px]">
-                  <div className="text-2xl md:text-3xl font-bold">{item.value}</div>
-                  <div className="text-xs opacity-90">{item.label}</div>
-                </div>
-              ))}
-            </div>
-
-            <Link to="/flash-sale" className="inline-flex items-center gap-2 bg-white text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all">
-              Grab Deals Now
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
-          </div>
-        </div>
       </section>
     </div>
   );
