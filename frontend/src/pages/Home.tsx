@@ -120,7 +120,7 @@ const Home = () => {
           {categories.map((category) => (
             <Link
               key={category._id}
-              to={`/category/${category.slug}`}
+              to={`/products/category/${category.slug}`}
               className="group relative overflow-hidden bg-gray-50 aspect-4/5 transition-all duration-500"
             >
               {/* Image Container */}

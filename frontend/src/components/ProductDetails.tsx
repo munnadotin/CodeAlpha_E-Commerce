@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../app/store';
-import { productByIdThunk } from '../api/productThunk';
+import { productBySlugThunk } from '../api/productThunk';
 import { Minus, Plus, ShoppingCart } from 'lucide-react';
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
@@ -14,8 +14,8 @@ const ProductDetail = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(productByIdThunk(id!));
-  }, [id])
+    dispatch(productBySlugThunk(slug!));
+  }, [slug])
 
   if (!productDetails) {
     return <div>Loading...</div>
@@ -48,7 +48,7 @@ const ProductDetail = () => {
 
         {/* Product Info */}
         <div>
-          <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">{productDetails?.category}</p>
+          <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">{productDetails?.category?.name}</p>
           <h1 className="text-3xl font-semibold text-gray-900 mb-4">{productDetails?.name}</h1>
 
           {/* Stock */}

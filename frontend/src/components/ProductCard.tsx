@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
 
                 {/* Quick View Button */}
                 <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-                    <Link to={`/product/${product._id}`} className="bg-white text-gray-900 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-900 hover:text-white transition-all transform translate-y-2 group-hover:translate-y-0 cursor-pointer">
+                    <Link to={`/product/${product.slug}`} className="bg-white text-gray-900 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-900 hover:text-white transition-all transform translate-y-2 group-hover:translate-y-0 cursor-pointer">
                         Quick View
                     </Link>
                 </div>
@@ -43,7 +43,7 @@ const ProductCard = ({ product }) => {
             <div className="p-4">
                 <div className="mb-2">
                     <p className="text-xs text-gray-500 uppercase tracking-wider">{product.category}</p>
-                    <Link to={`/product/${product._id}`}>
+                    <Link to={`/product/${product.slug}`}>
                         <h3 className="text-sm font-medium text-gray-900 line-clamp-2 hover:text-gray-600 transition-colors mt-1">
                             {product.name}
                         </h3>

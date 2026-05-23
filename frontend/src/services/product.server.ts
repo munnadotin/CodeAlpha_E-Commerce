@@ -11,10 +11,20 @@ export const productServer = async () => {
     return response;
 }
 
-export const productByIdServer = async (id: string) => {
+export const productBySlugServer = async (slug: string) => {
     const response = await apiRequest({
         method: "GET",
-        url: `${ENDPOINTS.PRODUCTS.BY_ID}/${id}`,
+        url: `${ENDPOINTS.PRODUCTS.BY_ID}/${slug}`,
+        data: {},
+        params: {}
+    })
+    return response;
+}
+
+export const productByCategoryServer = async (category: string) => {
+    const response = await apiRequest({
+        method: "GET",
+        url: `${ENDPOINTS.CATEGORIES.ALL}/${category}`,
         data: {},
         params: {}
     })

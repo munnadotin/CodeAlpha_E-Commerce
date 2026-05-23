@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Product } from "../types/product.type";
-import { productByIdThunk, productThunk } from "../api/productThunk";
+import { productBySlugThunk, productThunk } from "../api/productThunk";
 
 const initialState = {
     products: [] as Product[],
@@ -34,14 +34,14 @@ const productSlice = createSlice({
             })
 
             // single product
-            .addCase(productByIdThunk.pending, (state) => {
+            .addCase(productBySlugThunk.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(productByIdThunk.fulfilled, (state, action) => {
+            .addCase(productBySlugThunk.fulfilled, (state, action) => {
                 state.loading = false;
                 state.productDetails = action.payload.data;
             })
-            .addCase(productByIdThunk.rejected, (state, action) => {
+            .addCase(productBySlugThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             })

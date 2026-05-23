@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { productServer, productByIdServer } from "../services/product.server";
+import { productServer, productBySlugServer, productByCategoryServer } from "../services/product.server";
 import toast from "react-hot-toast";
 
 export const productThunk = createAsyncThunk("products/getAll", async (_, thunkAPI) => {
@@ -13,9 +13,20 @@ export const productThunk = createAsyncThunk("products/getAll", async (_, thunkA
     }
 })
 
-export const productByIdThunk = createAsyncThunk("products/getById", async (id: string, thunkAPI) => {
+export const productBySlugThunk = createAsyncThunk("products/getBySlug", async (slug: string, thunkAPI) => {
     try {
-        return await productByIdServer(id);
+        return await productBySlugServer(slug);
+    } catch (error: any) {
+        toast.error(error.message);
+        return thunkAPI.rejectWithValue({
+            message: error.message
+        });
+    }
+})
+
+export const productByCategoryThunk = createAsyncThunk("products/getByCategory", async (category: string, thunkAPI) => {
+    try {
+        return await productByCategoryServer(category);
     } catch (error: any) {
         toast.error(error.message);
         return thunkAPI.rejectWithValue({

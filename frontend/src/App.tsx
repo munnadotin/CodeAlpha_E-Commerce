@@ -10,6 +10,7 @@ import Ordres from "./pages/admin/Ordres"
 import Profile from "./pages/Profile"
 import { Toaster } from "react-hot-toast"
 import ProductDetail from "./components/ProductDetails"
+import Products from "./pages/Products"
 
 function App() {
   return (
@@ -29,8 +30,8 @@ function App() {
           <Route element={<ProudectedRoute allowedRoles={["user"]} />}>
             <Route index path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/product/categories/:slug" />
+            <Route path="/product/:slug" element={<ProductDetail />} />
+            <Route path="/products/category/:slug" element={<Products />} />
           </Route>
           <Route element={<ProudectedRoute allowedRoles={["user", "admin"]} />}>
             <Route path="/profile" element={<Profile />} />
