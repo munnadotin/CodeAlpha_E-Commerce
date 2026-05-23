@@ -3,8 +3,27 @@ import { upload } from "../middlewares/upload";
 import { authMiddlware } from "../middlewares/auth.middleware";
 import { productController } from "../controllers/product.controller";
 import { isAdmin } from "../middlewares/role.middleware";
+import { categroyController } from "../controllers/category.controller";
 
 export const productRouter = Router();
+
+// ========================= Categories ===================================
+
+/**
+ * @description Get all categories
+ * @route GET /api/products/categories
+ * @access public
+ */
+productRouter.get("/categories", categroyController.getCategories);
+
+/**
+ * @description Create a new category
+ * @route POST /api/products/categories
+ * @access private (only admin)
+ */
+productRouter.post("/categories", upload.single("image"), authMiddlware, isAdmin(), categroyController.createCategory);
+
+// ========================= Products ===================================
 
 /**
  * @description Add product images
@@ -47,4 +66,3 @@ productRouter.patch("/:id", upload.array("images", 5), authMiddlware, isAdmin(),
  * @access public (only admin)
  */
 productRouter.delete("/:id", authMiddlware, isAdmin(), productController.deleteProduct);
-

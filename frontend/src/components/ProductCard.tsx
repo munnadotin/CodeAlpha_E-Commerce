@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { ShoppingCart } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
     const [isHovered, setIsHovered] = useState(false);
@@ -18,11 +19,6 @@ const ProductCard = ({ product }) => {
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-
-                {/* Discount Badge */}
-                <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                    -20%
-                </div>
 
                 {/* Quick View Button */}
                 <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
@@ -54,30 +50,16 @@ const ProductCard = ({ product }) => {
                     </Link>
                 </div>
 
-                {/* Rating */}
-                <div className="flex items-center gap-1 mb-2">
-                    <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                            <svg key={i} className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                            </svg>
-                        ))}
-                    </div>
-                    <span className="text-xs text-gray-500">({product.ratings || 0})</span>
-                </div>
-
                 {/* Price */}
                 <div className="flex items-baseline gap-2 mb-3">
                     <span className="text-xl font-bold text-gray-900">₹{product.price}</span>
-                    <span className="text-sm text-gray-400 line-through">₹{Math.round(product.price * 1.25)}</span>
-                    <span className="text-xs text-green-600 font-medium">Save 25%</span>
+                    {/* <span className="text-sm text-gray-400 line-through">₹{Math.round(product.price * 1.25)}</span>
+                    <span className="text-xs text-green-600 font-medium">Save 25%</span> */}
                 </div>
 
                 {/* Add to Cart Button */}
-                <button className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group">
-                    <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.5 6M17 13l1.5 6M9 21h6M12 15v6" />
-                    </svg>
+                <button className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
+                    <ShoppingCart strokeWidth={1.5} className='h-5 w-5' />
                     Add to Cart
                 </button>
             </div>
