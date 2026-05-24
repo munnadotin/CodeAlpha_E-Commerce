@@ -4,7 +4,14 @@ import { Product } from "../models/product.model";
 
 const getCart = async (req: Request, res: Response) => {
     try {
-        const cart = await Cart.findOne({ user: (req as any).user?.id }).populate("items.product");
+        const cart = await Cart.findOne({
+            user: (req as any).user?.id,
+        }).populate({
+            path: "items.product",
+            populate: {
+                path: "category",
+            },
+        });
 
         res.status(200).json({
             success: true,

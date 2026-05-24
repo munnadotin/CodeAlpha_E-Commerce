@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getCategory } from "../services/category.service";
+import { getCartItems } from "../services/cart.service";
 import toast from "react-hot-toast";
 
-export const categoryThunk = createAsyncThunk("categories/getAll", async (_, thunkAPI) => {
+export const cartThunk = createAsyncThunk("cart/getAll", async (_, thunkAPI) => {
     try {
-        return await getCategory();
+        return await getCartItems();
     } catch (error: any) {
         toast.error(error.message);
         return thunkAPI.rejectWithValue({

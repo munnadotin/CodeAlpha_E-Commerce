@@ -1,11 +1,19 @@
 import { Handbag, HomeIcon, Search, User2 } from 'lucide-react';
 import '../../App.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../app/store';
+import { useEffect } from 'react';
+import { cartThunk } from '../../api/cartThunk';
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
+  const { products } = useSelector((state: RootState) => state.cart);
+  const disptach = useDispatch<AppDispatch>();
+  
+  useEffect(() => {
+    disptach(cartThunk());
+  }, [disptach]);
   const navigate = useNavigate();
 
   return (
@@ -34,7 +42,7 @@ const Navbar = () => {
           <div className="relative flex items-center gap-4">
             <button onClick={() => navigate('/cart')} type='button' className='p-2 border border-slate-300 rounded-md shadow-xs cursor-pointer relative'>
               <Handbag strokeWidth={1.5} className='h-5 w-5' />
-              <div className='absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>3</div>
+              <div className='absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>{products?.items?.length || 0}</div>
             </button>
             {user ? (
               <button onClick={() => navigate('/profile')} className='flex items-center gap-2 px-4 py-1.5 border border-slate-300 rounded-md shadow-xs cursor-pointer'>
@@ -68,7 +76,7 @@ const Navbar = () => {
           <button className="relative flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900">
             <Handbag strokeWidth={1.5} className='h-5 w-5' />
             <span className="text-xs">Cart</span>
-            <div className='absolute -top-1 -right-2 bg-blacthk text-white text-xs rounded-full w-4 h-4 flex items-center justify-center'>0</div>
+            <div className='absolute -top-1 -right-2 bg-black text-white text-xs rounded-full w-4 h-4 flex items-center justify-center'>{products?.items?.length || 0}</div>
           </button>
 
           {/* Profile */}

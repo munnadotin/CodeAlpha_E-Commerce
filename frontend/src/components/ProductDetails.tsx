@@ -1,19 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../app/store';
 import { productBySlugThunk } from '../api/productThunk';
-import { Minus, Plus, ShoppingCart, ChevronRight, Heart, Share2, Star, Shield, Truck, RotateCcw } from 'lucide-react';
+import { Minus, Plus, ShoppingCart, ChevronRight, Star, Shield, Truck, RotateCcw } from 'lucide-react';
 import CirLoader from './Loader';
 
 const ProductDetail = () => {
   const { slug } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { loading, productDetails } = useSelector((state: RootState) => state.products);
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(productBySlugThunk(slug!));
