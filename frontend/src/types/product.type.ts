@@ -4,6 +4,7 @@ export interface Product {
     slug: string;
     description: string;
     price: number;
+    discount: number;
     stock: number;
     category: {
         _id: string;
@@ -11,6 +12,11 @@ export interface Product {
         slug: string;
     };
     images: string[];
+    createdby: {
+        name: string;
+        email: string;
+    };
+    ratings: number;
     createdAt: string;
     updatedAt: string;
 }

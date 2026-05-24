@@ -6,10 +6,11 @@ export interface IProduct {
     description: string;
     price: number;
     images: string[];
-    category: string;
+    category: mongoose.Types.ObjectId;
     stock: number;
-    rating: number;
-    reviews: number;
+    ratings: number;
+    discount: number;
+    createdby: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }

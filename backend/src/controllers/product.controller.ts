@@ -69,7 +69,7 @@ const getAllProducts = async (req: Request, res: Response) => {
         const { page = 1, limit = 10 } = req.query;
 
         // Find products with pagination
-        const products = await Product.find().limit(Number(limit)).skip((Number(page) - 1) * Number(limit));
+        const products = await Product.find().populate("createdby", "name email").limit(Number(limit)).skip((Number(page) - 1) * Number(limit));
         const totalProducts = await Product.countDocuments();
 
         if (!products || products.length === 0) {
@@ -106,7 +106,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 const getProductBySlug = async (req: Request, res: Response) => {
     try {
         const { slug } = req.params;
-        const product = await Product.findOne({ slug: slug as string }).populate('category', 'slug name');
+        const product = await Product.findOne({ slug: slug as string }).populate('category', 'slug name').populate("createdby", "name email");
 
         if (!product) {
             return res.status(404).json({
@@ -215,7 +215,7 @@ const searchProducts = async (req: Request, res: Response) => {
                 { "name": { $regex: query as string, $options: "i" } },
                 { "description": { $regex: query as string, $options: "i" } },
             ]
-        });
+        }).populate("createdby", "name email").populate("category");
 
         // Add pagination
         const page = parseInt(req.query.page as string) || 1;
@@ -260,7 +260,7 @@ const getProductsByCategory = async (req: Request, res: Response) => {
         const limit = parseInt(req.query.limit as string) || 10;
         const skip = (page - 1) * limit;
         const productsWithPagination = products.slice(skip, skip + limit);
-        
+
         res.status(200).json({
             success: true,
             message: "Products fetched successfully",
