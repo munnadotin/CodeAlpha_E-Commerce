@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Product } from "../types/product.type";
-import { productBySlugThunk, productThunk } from "../api/productThunk";
+import { productByCategoryThunk, productBySlugThunk, productThunk } from "../api/productThunk";
 
 const initialState = {
     products: [] as Product[],
+    categoryProducts: [] as Product[],
     pagination: {},
     productDetails: null as Product | null,
     loading: false,
@@ -42,6 +43,21 @@ const productSlice = createSlice({
                 state.productDetails = action.payload.data;
             })
             .addCase(productBySlugThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
+            // category products
+
+            .addCase(productByCategoryThunk.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(productByCategoryThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.categoryProducts = action.payload.data;
+                state.pagination = action.payload.pagination;
+            })
+            .addCase(productByCategoryThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             })

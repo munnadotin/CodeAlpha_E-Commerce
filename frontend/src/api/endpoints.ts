@@ -11,6 +11,6 @@ export const ENDPOINTS = {
         BY_ID: "/products",
     },
     CATEGORIES: {
-        ALL: "/products/categories",
+        ALL: "/products/categories", //http://localhost:3000/api/products/categories/electronics
     }
 };

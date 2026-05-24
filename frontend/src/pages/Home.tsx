@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../app/store';
 import { productThunk } from '../api/productThunk';
 import { categoryThunk } from '../api/categoryThunk';
+import { ArrowRight, ChevronRight } from 'lucide-react';
+import Loader from '../components/ui/Loader';
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -147,9 +149,7 @@ const Home = () => {
                 <div className="opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
                   <span className="text-xs tracking-wider text-white/80 uppercase flex items-center gap-1">
                     Explore
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <ArrowRight strokeWidth={1.5} size={14} />
                   </span>
                 </div>
               </div>
@@ -170,26 +170,11 @@ const Home = () => {
           </div>
           <Link to="/trending" className="text-gray-600 hover:text-gray-900 font-medium flex items-center gap-1 group">
             View All
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight strokeWidth={1.5} className='h-4 w-4 group-hover:translate-x-1 transition-transform' />
           </Link>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl h-96 animate-pulse">
-                <div className="h-64 bg-gray-200 rounded-t-2xl"></div>
-                <div className="p-4 space-y-3">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-8 bg-gray-200 rounded"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
+        {loading ? <Loader /> : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
               <ProductCard key={product._id} product={product} />

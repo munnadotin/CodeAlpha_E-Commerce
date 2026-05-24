@@ -256,10 +256,21 @@ const getProductsByCategory = async (req: Request, res: Response) => {
 
         const products = await Product.find({ category: extractCategory._id });
 
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const skip = (page - 1) * limit;
+        const productsWithPagination = products.slice(skip, skip + limit);
+        
         res.status(200).json({
             success: true,
             message: "Products fetched successfully",
-            data: products
+            data: productsWithPagination,
+            pagination: {
+                page,
+                limit,
+                total: products.length,
+                totalPages: Math.ceil(products.length / limit)
+            }
         })
     } catch (error: any) {
         res.status(500).json({
