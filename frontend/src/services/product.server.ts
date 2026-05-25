@@ -11,6 +11,16 @@ export const productServer = async () => {
     return response;
 }
 
+export const searchProduct = async (query: string) => {
+    const response = await apiRequest({
+        method: "GET",
+        url: `${ENDPOINTS.PRODUCTS.SERACH}?query=${query}`,
+        data: {},
+        params: {}
+    })
+    return response;
+}
+
 export const productBySlugServer = async (slug: string) => {
     const response = await apiRequest({
         method: "GET",

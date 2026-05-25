@@ -9,6 +9,7 @@ export const ENDPOINTS = {
     PRODUCTS: {
         ALL: "/products",
         BY_ID: "/products",
+        SERACH: "/products/search",
     },
     CATEGORIES: {
         ALL: "/products/categories",

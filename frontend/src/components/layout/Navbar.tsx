@@ -3,19 +3,22 @@ import '../../App.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../app/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { cartThunk } from '../../api/cartThunk';
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { products } = useSelector((state: RootState) => state.cart);
+  const { categories } = useSelector((state: RootState) => state.categories);
+  const [query, setQuery] = useState('');
   const disptach = useDispatch<AppDispatch>();
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     disptach(cartThunk());
   }, [disptach]);
-  const navigate = useNavigate();
 
+  
   return (
     <>
       {/* Desktop Navbar*/}
@@ -29,13 +32,29 @@ const Navbar = () => {
           {/* search & filter */}
           <div className="relative flex items-center border border-slate-300 shadow-xs rounded-md overflow-hidden bg-white">
             <select name="query" id="query" className="px-5 py-2.5 bg-transparent text-gray-700 text-sm border-r border-slate-300 cursor-pointer outline-none">
-              <option value="all">All</option>
-              <option value="electronics">Electronics</option>
-              <option value="fashion">Fashion</option>
-              <option value="home">Home</option>
+              {categories.map((category) => (
+                <option
+                  key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
             </select>
-            <input type="text" className="w-72 px-5 py-2.5 text-gray-700 placeholder-slate-400 text-sm outline-none" placeholder="Search..." />
-            <Search className="absolute h-5 w-5 right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer" />
+            <input
+              onChange={(e) => setQuery(e.target.value)}
+              name="query"
+              type="text"
+              className="w-72 px-5 py-2.5 text-gray-700 placeholder-slate-400 text-sm outline-none"
+              placeholder="Search..."
+            />
+            <Search
+              onClick={() => {
+                if (query.trim() !== "") {
+                  navigate(`/products/search?q=${query}`)
+                  setQuery("");
+                }
+              }}
+              type='button'
+              className="absolute h-5 w-5 right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer" />
           </div>
 
           {/* action */}
