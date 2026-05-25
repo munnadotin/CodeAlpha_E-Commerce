@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { CartType } from "../types/cart.type";
-import { cartThunk } from "../api/cartThunk";
+import { addCartItemThunk, cartThunk, removeCartItemThunk, updateCartItemThunk } from "../api/cartThunk";
 
 const initialState = {
     products: {} as CartType,
@@ -19,7 +19,24 @@ const cartSlice = createSlice({
                 state.loading = true;
             })
 
+            // main cart
             .addCase(cartThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.products = action.payload.data;
+            })
+            // update cart qunatity
+            .addCase(updateCartItemThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.products = action.payload.data;
+            })
+            // add to cart
+            .addCase(addCartItemThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.products = action.payload.data;
+            })
+
+            // remove from cart
+            .addCase(removeCartItemThunk.fulfilled, (state, action) => {
                 state.loading = false;
                 state.products = action.payload.data;
             })

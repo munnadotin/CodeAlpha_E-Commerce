@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '../app/store';
+import { addCartItemThunk } from '../api/cartThunk';
+import type { Product } from '../types/product.type';
+import toast from 'react-hot-toast';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product }: { product: Product }) => {
+    const dispatch = useDispatch<AppDispatch>();
     const [isHovered, setIsHovered] = useState(false);
     const [currentImage, setCurrentImage] = useState(0);
 
@@ -42,7 +48,7 @@ const ProductCard = ({ product }) => {
             {/* Product Info */}
             <div className="p-4">
                 <div className="mb-2">
-                    <p className="text-xs text-gray-500 uppercase tracking-wider">{product.category}</p>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider">{product.category.name}</p>
                     <Link to={`/product/${product.slug}`}>
                         <h3 className="text-sm font-medium text-gray-900 line-clamp-2 hover:text-gray-600 transition-colors mt-1">
                             {product.name}
@@ -58,7 +64,12 @@ const ProductCard = ({ product }) => {
                 </div>
 
                 {/* Add to Cart Button */}
-                <button className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
+                <button
+                    onClick={() => {
+                        dispatch(addCartItemThunk({ productId: product._id, quantity: 1 }));
+                        toast.success("Item added into cart successfully");
+                    }}
+                    className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
                     <ShoppingCart strokeWidth={1.5} className='h-5 w-5' />
                     Add to Cart
                 </button>

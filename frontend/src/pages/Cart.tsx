@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../app/store";
 import Error from "../components/Error";
 import { useNavigate, Link } from "react-router-dom";
-import { cartThunk } from "../api/cartThunk";
-import { ShoppingBag, ShoppingCart, Trash2 } from "lucide-react";
+import { cartThunk, removeCartItemThunk, updateCartItemThunk } from "../api/cartThunk";
+import { ArrowLeft, Minus, Plus, ShoppingBag, ShoppingCart, Trash2 } from "lucide-react";
 
 const Cart = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -65,7 +65,7 @@ const Cart = () => {
                 to="/"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all"
               >
-                <ShoppingCart strokeWidth={1.5} className="h-5 w-5"/>
+                <ShoppingCart strokeWidth={1.5} className="h-5 w-5" />
                 Continue Shopping
               </Link>
             </div>
@@ -77,7 +77,7 @@ const Cart = () => {
               {products.items.map((item) => (
                 <div
                   key={item._id}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow"
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 transition-shadow"
                 >
                   <div className="flex gap-4">
                     {/* Product Image */}
@@ -95,7 +95,7 @@ const Cart = () => {
                         <div>
                           <Link
                             to={`/product/${item.product.slug}`}
-                            className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors line-clamp-2"
+                            className="text-sm font-medium text-gray-900 line-clamp-2"
                           >
                             {item.product.name}
                           </Link>
@@ -103,8 +103,10 @@ const Cart = () => {
                             Category: {item.product.category?.name}
                           </p>
                         </div>
-                        <button className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer">
-                          <Trash2 strokeWidth={1.5} className="h-5 w-5"/>
+                        <button
+                          onClick={() => { dispatch(removeCartItemThunk({ productId: item.product._id })) }}
+                          className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer">
+                          <Trash2 strokeWidth={1.5} className="h-5 w-5" />
                         </button>
                       </div>
 
@@ -116,18 +118,14 @@ const Cart = () => {
 
                         {/* Quantity Controls */}
                         <div className="flex items-center gap-2 border border-gray-200 rounded-lg">
-                          <button className="px-2 py-1 hover:bg-gray-50 transition-colors">
-                            <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                            </svg>
+                          <button onClick={() => dispatch(updateCartItemThunk({ cartItemId: item._id, action: "decrease" }))} className="px-2 py-1 hover:bg-gray-50 transition-colors cursor-pointer">
+                            <Minus strokeWidth={1.5} className="h-5 w-5 text-gray-600" />
                           </button>
                           <span className="w-8 text-center text-sm font-medium">
                             {item.quantity}
                           </span>
-                          <button className="px-2 py-1 hover:bg-gray-50 transition-colors">
-                            <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
+                          <button onClick={() => dispatch(updateCartItemThunk({ cartItemId: item._id, action: "increase" }))} className="px-2 py-1 hover:bg-gray-50 transition-colors cursor-pointer">
+                            <Plus strokeWidth={1.5} className="h-5 w-5 text-gray-600" />
                           </button>
                         </div>
 
@@ -178,12 +176,10 @@ const Cart = () => {
                 </button>
 
                 <Link
-                  to="/shop"
+                  to="/"
                   className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
+                  <ArrowLeft strokeWidth={1.5} className="h-5 w-5" />
                   Continue Shopping
                 </Link>
               </div>

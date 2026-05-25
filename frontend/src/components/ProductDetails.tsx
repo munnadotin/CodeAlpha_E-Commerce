@@ -5,6 +5,7 @@ import type { AppDispatch, RootState } from '../app/store';
 import { productBySlugThunk } from '../api/productThunk';
 import { Minus, Plus, ShoppingCart, ChevronRight, Star, Shield, Truck, RotateCcw } from 'lucide-react';
 import CirLoader from './Loader';
+import { addCartItemThunk } from '../api/cartThunk';
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -208,6 +209,7 @@ const ProductDetail = () => {
 
             {/* Add to Cart Button */}
             <button
+              onClick={() => { dispatch(addCartItemThunk({ productId: productDetails._id, quantity })) }}
               disabled={productDetails.stock === 0}
               className={`flex items-center justify-center gap-3 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${productDetails.stock > 0
                 ? 'bg-gray-900 text-white hover:bg-gray-800 active:scale-98'

@@ -97,7 +97,7 @@ const updateCartItem = async (req: Request, res: Response) => {
             });
         }
 
-        const cart = await Cart.findOne({ user: (req as any).user?.id });
+        const cart = await Cart.findOne({ user: (req as any).user?.id }).populate({ path: "items.product", populate: { path: "category" } });
         if (!cart) {
             return res.status(404).json({
                 success: false,
@@ -127,7 +127,7 @@ const updateCartItem = async (req: Request, res: Response) => {
         res.status(200).json({
             success: true,
             message: "Item updated",
-            cart
+            data: cart
         });
 
     } catch (error) {
@@ -149,7 +149,7 @@ const removeCartItem = async (req: Request, res: Response) => {
             });
         }
 
-        let cart = await Cart.findOne({ user: (req as any).user?.id });
+        let cart = await Cart.findOne({ user: (req as any).user?.id }).populate({ path: "items.product", populate: { path: "category" } });
         if (!cart) {
             return res.status(404).json({
                 success: false,
@@ -157,14 +157,14 @@ const removeCartItem = async (req: Request, res: Response) => {
             });
         }
 
-        cart.items.pull({ _id: id });
+        cart.items = cart.items.filter((item: any) => item.product._id.toString() !== id) as any;
 
         await cart.save();
 
         res.status(200).json({
             success: true,
             message: "Item removed from cart",
-            cart
+            data: cart
         });
     } catch (error) {
         res.status(500).json({

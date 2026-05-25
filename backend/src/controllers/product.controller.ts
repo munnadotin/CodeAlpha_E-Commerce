@@ -69,7 +69,7 @@ const getAllProducts = async (req: Request, res: Response) => {
         const { page = 1, limit = 10 } = req.query;
 
         // Find products with pagination
-        const products = await Product.find().populate("createdby", "name email").limit(Number(limit)).skip((Number(page) - 1) * Number(limit));
+        const products = await Product.find().populate([{ path: "createdby", select: "name email" }, { path: "category", select: "name" }]).limit(Number(limit)).skip((Number(page) - 1) * Number(limit));
         const totalProducts = await Product.countDocuments();
 
         if (!products || products.length === 0) {
