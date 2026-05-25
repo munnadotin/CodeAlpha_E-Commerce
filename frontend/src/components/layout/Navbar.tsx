@@ -1,4 +1,4 @@
-import { Handbag, HomeIcon, Search, User2 } from 'lucide-react';
+import { Handbag, HomeIcon, Search, User2, X } from 'lucide-react';
 import '../../App.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,8 @@ const Navbar = () => {
   const { products } = useSelector((state: RootState) => state.cart);
   const { categories } = useSelector((state: RootState) => state.categories);
   const [query, setQuery] = useState('');
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const disptach = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -18,7 +20,15 @@ const Navbar = () => {
     disptach(cartThunk());
   }, [disptach]);
 
-  
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setShowSearch(false);
+      setSearchQuery('');
+      navigate(`/products/search?q=${searchQuery.trim()}`);
+    }
+  };
+
   return (
     <>
       {/* Desktop Navbar*/}
@@ -77,34 +87,119 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Navbar */}
-      <div className="block md:hidden w-full fixed bottom-0 z-50 border-t border-slate-300 bg-white shadow-xs">
-        <div className="w-full flex items-center justify-around p-3">
+      <div className="block md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
+        <div className="flex items-center justify-around px-4 py-2">
           {/* Home */}
-          <Link to="/" className="flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900">
-            <HomeIcon strokeWidth={1.5} className='h-5 w-5' />
+          <Link
+            to="/"
+            className="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            <HomeIcon strokeWidth={1.5} className="h-5 w-5" />
             <span className="text-xs">Home</span>
           </Link>
 
           {/* Search */}
-          <button className="flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900">
-            <Search strokeWidth={1.5} className='h-5 w-5' />
+          <button
+            onClick={() => setShowSearch(true)}
+            className="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+          >
+            <Search strokeWidth={1.5} className="h-5 w-5" />
             <span className="text-xs">Search</span>
           </button>
 
           {/* Cart */}
-          <button className="relative flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900">
-            <Handbag strokeWidth={1.5} className='h-5 w-5' />
+          <button
+            onClick={() => navigate('/cart')}
+            className="relative flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+          >
+            <Handbag strokeWidth={1.5} className="h-5 w-5" />
             <span className="text-xs">Cart</span>
-            <div className='absolute -top-1 -right-2 bg-black text-white text-xs rounded-full w-4 h-4 flex items-center justify-center'>{products?.items?.length || 0}</div>
+            {(products?.items?.length > 0) && (
+              <div className="absolute -top-1 -right-2 bg-gray-900 text-white text-[10px] font-medium rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
+                {products.items.length}
+              </div>
+            )}
           </button>
 
-          {/* Profile */}
-          <button onClick={() => navigate('/login')} className="flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900">
-            <User2 strokeWidth={1.5} className='h-5 w-5' />
-            <span className="text-xs">Profile</span>
-          </button>
+          {/* Profile / Login */}
+          {user ? (
+            <button
+              onClick={() => navigate('/profile')}
+              className="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+            >
+              <User2 strokeWidth={1.5} className="h-5 w-5" />
+              <span className="text-xs">Profile</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+            >
+              <User2 strokeWidth={1.5} className="h-5 w-5" />
+              <span className="text-xs">Login</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Search Modal */}
+      {showSearch && (
+        <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur-sm md:hidden">
+          <div className="p-4">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-medium text-gray-900">Search Products</h3>
+              <button
+                onClick={() => {
+                  setShowSearch(false);
+                  setSearchQuery('');
+                }}
+                className="p-1 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Search Form */}
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for products..."
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg outline-none focus:border-gray-400 transition-colors text-gray-900 placeholder:text-gray-400"
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="w-full mt-4 bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+              >
+                Search
+              </button>
+            </form>
+
+            {/* Popular Searches */}
+            <div className="mt-8">
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Popular Searches</p>
+              <div className="flex flex-wrap gap-2">
+                {['electronics', 'fashion', 'shoes', 'mobile', 'laptop'].map((term) => (
+                  <button
+                    key={term}
+                    onClick={() => {
+                      setSearchQuery(term);
+                      navigate(`/products/search?q=${term}`);
+                      setShowSearch(false);
+                    }}
+                    className="px-3 py-1.5 bg-gray-100 text-sm text-gray-600 rounded-full hover:bg-gray-200 hover:text-gray-900 transition"
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
