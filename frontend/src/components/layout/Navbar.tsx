@@ -13,6 +13,7 @@ const Navbar = () => {
   const [query, setQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
   const disptach = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -41,10 +42,24 @@ const Navbar = () => {
 
           {/* search & filter */}
           <div className="relative flex items-center border border-slate-300 shadow-xs rounded-md overflow-hidden bg-white">
-            <select name="query" id="query" className="px-5 py-2.5 bg-transparent text-gray-700 text-sm border-r border-slate-300 cursor-pointer outline-none">
+            <select
+              name="query"
+              id="query"
+              value={selectedCategory}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value)
+                navigate(`/products/category/${e.target.value}`);
+              }}
+              className="px-5 py-2.5 bg-transparent text-gray-700 text-sm border-r border-slate-300 cursor-pointer outline-none"
+            >
+              {!selectedCategory && (
+                <option value="" disabled>
+                  Select Category
+                </option>
+              )}
+
               {categories.map((category) => (
-                <option
-                  key={category._id} value={category._id}>
+                <option key={category.slug} value={category.slug}>
                   {category.name}
                 </option>
               ))}

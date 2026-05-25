@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast"
 import ProductDetail from "./components/ProductDetails"
 import Products from "./pages/Products"
 import SearchProduct from "./pages/SearchProduct"
+import Checkout from "./pages/Checkout"
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/product/:slug" element={<ProductDetail />} />
             <Route path="/products/category/:slug" element={<Products />} />
             <Route path="/products/search" element={<SearchProduct />} />
+            <Route path="/checkout" element={<Checkout />} />
           </Route>
           <Route element={<ProudectedRoute allowedRoles={["user", "admin"]} />}>
             <Route path="/profile" element={<Profile />} />

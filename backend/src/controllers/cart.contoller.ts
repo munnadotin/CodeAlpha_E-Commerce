@@ -123,6 +123,13 @@ const updateCartItem = async (req: Request, res: Response) => {
             }
         }
 
+        let total = 0;
+        for (const item of cart.items) {
+            const product = await Product.findById(item.product);
+            total += item.quantity * product!.price;
+        }
+
+        cart.total = total;
         await cart.save();
         res.status(200).json({
             success: true,
@@ -159,6 +166,13 @@ const removeCartItem = async (req: Request, res: Response) => {
 
         cart.items = cart.items.filter((item: any) => item.product._id.toString() !== id) as any;
 
+        let total = 0;
+        for (const item of cart.items) {
+            const product = await Product.findById(item.product);
+            total += item.quantity * product!.price;
+        }
+
+        cart.total = total;
         await cart.save();
 
         res.status(200).json({

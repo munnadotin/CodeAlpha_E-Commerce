@@ -19,4 +19,5 @@ export interface Product {
     ratings: number;
     createdAt: string;
     updatedAt: string;
+    quantity?: number;
 }

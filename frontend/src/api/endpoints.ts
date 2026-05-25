@@ -16,5 +16,8 @@ export const ENDPOINTS = {
     }, 
     CART: {
         ALL: "/cart",
+    }, 
+    ORDER: {
+        CREATE: "/orders",
     }
 };

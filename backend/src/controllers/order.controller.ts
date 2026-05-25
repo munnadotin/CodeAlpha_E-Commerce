@@ -14,8 +14,7 @@ const createOrder = async (req: Request, res: Response) => {
             })
         }
 
-        const cartItems = await Cart.findOne({ user: (req as any).user._id }).populate("items.product");
-
+        const cartItems = await Cart.findOne({ user: (req as any).user._id }).populate({ path: "items.product", populate: { path: "category" } });
         if (!cartItems) {
             return res.status(404).json({
                 success: false,
@@ -63,7 +62,7 @@ const createOrder = async (req: Request, res: Response) => {
 
 const getOrders = async (req: Request, res: Response) => {
     try {
-        const orders = await Order.find({ user: (req as any).user._id });
+        const orders = await Order.find({ user: (req as any).user._id }).populate({ path: "items.product", populate: { path: "category" } });
 
         res.status(200).json({
             success: true,
@@ -80,7 +79,7 @@ const getOrders = async (req: Request, res: Response) => {
 
 const getOrderById = async (req: Request, res: Response) => {
     try {
-        const order = await Order.findById(req.params.id);
+        const order = await Order.findById(req.params.id).populate({ path: "items.product", populate: { path: "category" } });
 
         if (!order) {
             return res.status(404).json({
@@ -106,16 +105,16 @@ const updateOrder = async (req: Request, res: Response) => {
     try {
         const orderId = req.params.id;
         const { status, paymentStatus } = req.body;
-        
+
         const order = await Order.findById(orderId);
-        
+
         if (!order) {
             return res.status(404).json({
                 success: false,
                 message: "Order not found"
             })
         }
-        
+
         order.status = status || order.status;
         order.paymentStatus = paymentStatus || order.paymentStatus;
         await order.save();
