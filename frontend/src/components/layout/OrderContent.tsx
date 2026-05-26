@@ -4,7 +4,7 @@ import type { AppDispatch, RootState } from "../../app/store";
 import { useEffect } from "react";
 import { getOrdersThunk } from "../../api/orderThunk";
 import CirLoader from "../Loader";
-import { Package, ChevronRight, Calendar, CreditCard, Truck, CheckCircle, Clock } from "lucide-react";
+import { Package, ChevronRight, Calendar, Truck, CheckCircle, Clock } from "lucide-react";
 
 export default function OrderContent() {
     const dispatch = useDispatch<AppDispatch>();
@@ -39,12 +39,12 @@ export default function OrderContent() {
             case 'shipped':
                 return 'bg-blue-50 text-blue-700 border-blue-100';
             default:
-                return 'bg-gray-50 text-gray-700 border-gray-100';
+                return 'bg-gray-200 text-gray-700 border-gray-100';
         }
     };
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-300 overflow-hidden">
             {/* Header */}
             <div className="border-b border-gray-100 bg-gray-50/30 px-6 md:px-8 py-6">
                 <div className="flex items-center justify-between">
@@ -64,7 +64,7 @@ export default function OrderContent() {
                     <div className="text-center py-16">
                         <div className="relative inline-block mb-6">
                             <div className="absolute inset-0 bg-gray-100 rounded-full blur-2xl opacity-50"></div>
-                            <div className="relative bg-white rounded-full p-6 border border-gray-100 shadow-xl">
+                            <div className="relative bg-gray-50 rounded-full p-6 border border-slate-300">
                                 <Package className="w-12 h-12 text-gray-300" strokeWidth={1} />
                             </div>
                         </div>
@@ -73,7 +73,7 @@ export default function OrderContent() {
                             Looks like you haven't placed any orders. Start exploring our collection.
                         </p>
                         <Link
-                            to="/shop"
+                            to="/"
                             className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors rounded-lg"
                         >
                             Start Shopping
@@ -160,7 +160,7 @@ export default function OrderContent() {
                                 <div className="bg-gray-50/20 px-5 py-3 border-t border-gray-100 flex justify-end">
                                     <button
                                         onClick={() => navigate(`/orders/${order._id}`)}
-                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1 group"
+                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1 group cursor-pointer"
                                     >
                                         View Order Details
                                         <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />

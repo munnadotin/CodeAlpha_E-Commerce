@@ -13,6 +13,8 @@ import ProductDetail from "./components/ProductDetails"
 import Products from "./pages/Products"
 import SearchProduct from "./pages/SearchProduct"
 import Checkout from "./pages/Checkout"
+import OrderSuccess from "./pages/payment/OrderSuccess"
+import OrderCancel from "./pages/payment/OrderCancel"
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
             <Route path="/products/category/:slug" element={<Products />} />
             <Route path="/products/search" element={<SearchProduct />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout/order-success" element={<OrderSuccess />} />
+            <Route path="/checkout/order-cancel" element={<OrderCancel />} />
           </Route>
           <Route element={<ProudectedRoute allowedRoles={["user", "admin"]} />}>
             <Route path="/profile" element={<Profile />} />

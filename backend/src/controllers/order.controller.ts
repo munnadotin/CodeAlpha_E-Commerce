@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import { Cart } from "../models/cart.model"
 import { Order } from "../models/order.model";
-import { IProduct } from "../types/product.type";
 
 const createOrder = async (req: Request, res: Response) => {
     try {
@@ -11,54 +10,63 @@ const createOrder = async (req: Request, res: Response) => {
             return res.status(400).json({
                 success: false,
                 message: "Payment method is required"
-            })
+            });
         }
 
-        const cartItems = await Cart.findOne({ user: (req as any).user._id }).populate({ path: "items.product", populate: { path: "category" } });
-        if (!cartItems) {
+        const cartItems = await Cart.findOne({ user: (req as any).user._id })
+            .populate("items.product");
+
+        if (!cartItems || cartItems.items.length === 0) {
             return res.status(404).json({
                 success: false,
                 message: "Cart is empty"
-            })
+            });
         }
 
-        const orderItems = cartItems.items.map(item => {
-            const product = item.product as unknown as IProduct;
+        const orderItems = cartItems.items.map((item: any) => {
+            const product = item.product;
             return {
                 product: product._id,
                 quantity: item.quantity,
                 price: product.price,
                 name: product.name,
-                image: product.images[0],
-            }
+                image: product.images?.[0]
+            };
         });
 
-        const totalPrice = orderItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const totalPrice = orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
-        // create order
-        const order = await Order.create({
+        const order = {
             items: orderItems,
             total: totalPrice,
             user: (req as any).user._id,
             paymentMethod,
-            shippingAddress: (req as any)?.user?.address[0],
-        })
+            shoppingAddress: (req as any)?.user?.address?.[0]
+        };
 
-        // clear cart
-        await Cart.updateOne({}, { $set: { items: [] } });
+        // create order
+        const newOrder = await Order.create(order);
+
+        // clear only current user's cart
+        await Cart.updateOne(
+            { user: (req as any).user._id },
+            { $set: { items: [] } }
+        );
 
         res.status(201).json({
             success: true,
             message: "Order created successfully",
-            data: order
-        })
+            data: newOrder
+        });
+
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error instanceof Error ? error.message : "Internal server error"
-        })
+            message:
+                error instanceof Error ? error.message : "Internal server error"
+        });
     }
-}
+};
 
 const getOrders = async (req: Request, res: Response) => {
     try {

@@ -12,7 +12,7 @@ function ProfileContent({ user }: ProfileContentProps) {
     const [activeModel, setActiveModel] = useState(false);
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Profile Information</h2>
 
             <div className="space-y-6">

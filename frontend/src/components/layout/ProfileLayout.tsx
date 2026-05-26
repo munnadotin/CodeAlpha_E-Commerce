@@ -23,7 +23,7 @@ const ProfileLayout = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Card */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                             <ProfileCard user={user} activeTab={activeTab} setActiveTab={setActiveTab} />
                         </div>
                     </div>

@@ -12,6 +12,14 @@ const orderSchema = new mongoose.Schema({
             ref: "Product",
             required: true
         },
+        name: {
+            type: String,
+            required: true
+        },
+        image: {
+            type: String,
+            required: true
+        },
         quantity: {
             type: Number,
             required: true,
@@ -31,7 +39,7 @@ const orderSchema = new mongoose.Schema({
         enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
         default: "pending"
     },
-    shippingAddress: {
+    shoppingAddress: {
         street: String,
         city: String,
         state: String,
