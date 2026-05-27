@@ -37,52 +37,53 @@ const addCartItem = async (req: Request, res: Response) => {
             });
         }
 
-        let cart = await Cart.findOne({ user: (req as any).user?.id });
-        if (!cart) {
-            cart = await Cart.create({
-                user: (req as any).user?.id,
-                items: [{
-                    product: productId,
-                    quantity
-                }],
-                total: 0
-            });
-
-        } else {
-            // check if product already exists in cart
-            const existingItem = cart.items.find(item => item.product.toString() === productId);
-            if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                cart.items.push({
-                    product: productId,
-                    quantity
-                });
-            }
-
-            await cart.save();
-        }
-
-        let total = 0;
-        for (const item of cart.items) {
-            const product = await Product.findById(item.product);
-            total += item.quantity * product!.price;
-        }
-
-        cart.total = total;
-        await cart.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Item added to cart"
+        let cart = await Cart.findOne({ user: (req as any).user?.id }).populate({ path: "items.product", populate: { path: "category" }});
+    if (!cart) {
+        cart = await Cart.create({
+            user: (req as any).user?.id,
+            items: [{
+                product: productId,
+                quantity
+            }],
+            total: 0
         });
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error instanceof Error ? error.message : "Internal server error"
-        })
+    } else {
+        // check if product already exists in cart
+        const existingItem = cart.items.find(item => item.product.toString() === productId);
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.items.push({
+                product: productId,
+                quantity
+            });
+        }
+
+        await cart.save();
     }
+
+    let total = 0;
+    for (const item of cart.items) {
+        const product = await Product.findById(item.product);
+        total += item.quantity * product!.price;
+    }
+
+    cart.total = total;
+    await cart.save();
+
+    res.status(200).json({
+        success: true,
+        message: "Item added to cart",
+        data: cart
+    });
+
+} catch (error) {
+    res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Internal server error"
+    })
+}
 };
 
 const updateCartItem = async (req: Request, res: Response) => {

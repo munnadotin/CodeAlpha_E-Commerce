@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../app/store';
-import { addCartItemThunk } from '../api/cartThunk';
+import { addCartItemThunk, cartThunk } from '../api/cartThunk';
 import type { Product } from '../types/product.type';
 import toast from 'react-hot-toast';
 
@@ -67,6 +67,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 <button
                     onClick={() => {
                         dispatch(addCartItemThunk({ productId: product._id, quantity: 1 }));
+                        dispatch(cartThunk());
                         toast.success("Item added into cart successfully");
                     }}
                     className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">

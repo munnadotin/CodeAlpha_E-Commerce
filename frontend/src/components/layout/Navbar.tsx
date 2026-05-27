@@ -1,10 +1,10 @@
 import { Handbag, HomeIcon, Search, User2, X } from 'lucide-react';
-import '../../App.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../../app/store';
 import { useEffect, useState } from 'react';
 import { cartThunk } from '../../api/cartThunk';
+import type { AppDispatch, RootState } from '../../app/store';
+import '../../App.css';
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
