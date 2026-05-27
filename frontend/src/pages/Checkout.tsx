@@ -9,9 +9,9 @@ function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const addresses = user?.address || [];
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, currentOrder } = useSelector((state: RootState) => state.orders);
+  const { loading } = useSelector((state: RootState) => state.orders);
   const navigate = useNavigate();
-  console.log(currentOrder)
+
   const handlePlaceOrder = async () => {
     if (paymentMethod === "upi") {
       // Handle UPI payment

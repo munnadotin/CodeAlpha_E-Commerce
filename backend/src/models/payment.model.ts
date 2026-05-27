@@ -20,15 +20,6 @@ const paymentSchema = new mongoose.Schema({
         required: true,
         default: "INR"
     },
-    razorpayOrderId: {
-        type: String
-    },
-    razorpayPaymentId: {
-        type: String
-    },
-    razorpaySignature: {
-        type: String
-    },
     paymentMethod: {
         type: String,
         enum: ["cod", "upi"],
@@ -39,14 +30,18 @@ const paymentSchema = new mongoose.Schema({
         enum: ["pending", "completed", "failed"],
         default: "pending"
     },
+    stripeSessionId: {
+        type: String,
+    },
+    stripePaymentIntentId: {
+        type: String,
+    },
     transactionId: {
         type: String,
-        required: true
     },
     paymentDate: {
         type: Date,
-        default: Date.now
-    }
+    },
 }, {
     timestamps: true
 });

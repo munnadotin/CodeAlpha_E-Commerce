@@ -4,6 +4,7 @@ import { productRouter } from "./routes/product.route";
 import { cartRouter } from "./routes/cart.route";
 import { orderRouter } from "./routes/order.route";
 import { paymentRouter } from "./routes/payment.route";
+import Webhookrouter from "./routes/webhook.route";
 import cors from "cors";
 
 export const app = express();
@@ -13,9 +14,16 @@ export const app = express();
  */
 app.use(express.json());
 app.use(cors({
-    origin: process.env.CLIENT_URL, 
+    origin: process.env.CLIENT_URL,
     credentials: true
 }))
+
+/**
+ * Routes - Webhook
+ * @route /api/webhook
+ * @access Public
+ */
+app.use("/api/webhook", Webhookrouter);
 
 /**
  * Routes - Authentication
@@ -47,7 +55,8 @@ app.use("/api/orders", orderRouter);
 
 /**
  * Routes - Payment
- * @route /api/payments
+ * @route /api/payment
  * @access private
  */
-app.use("/api/payments", paymentRouter);
+app.use("/api/payment", paymentRouter);
+

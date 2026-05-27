@@ -1,6 +1,8 @@
 import { Request, Response } from "express"
 import { Cart } from "../models/cart.model"
 import { Order } from "../models/order.model";
+import createCheckoutSession from "../services/payment.service";
+import { Payment } from "../models/payment.model";
 
 const createOrder = async (req: Request, res: Response) => {
     try {
@@ -33,7 +35,6 @@ const createOrder = async (req: Request, res: Response) => {
                 image: product.images?.[0]
             };
         });
-
         const totalPrice = orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
         const order = {
@@ -44,20 +45,52 @@ const createOrder = async (req: Request, res: Response) => {
             shoppingAddress: (req as any)?.user?.address?.[0]
         };
 
-        // create order
-        const newOrder = await Order.create(order);
+        // create order only when payment method is COD
+        let newOrder;
+        if (paymentMethod === "cod") {
+            newOrder = await Order.create(order);
 
-        // clear only current user's cart
-        await Cart.updateOne(
-            { user: (req as any).user._id },
-            { $set: { items: [] } }
-        );
+            // clear only current user's cart
+            await Cart.updateOne(
+                { user: (req as any).user._id },
+                { $set: { items: [] } }
+            );
 
-        res.status(201).json({
-            success: true,
-            message: "Order created successfully",
-            data: newOrder
-        });
+            res.status(201).json({
+                success: true,
+                message: "Order created successfully",
+                data: newOrder
+            });
+        } else {
+            newOrder = await Order.create(order);
+
+            const session = await createCheckoutSession({
+                cartItems: orderItems,
+                orderId: newOrder._id.toString(),
+                userId: (req as any).user._id.toString()
+            })
+
+            await Payment.create({
+                order: newOrder._id,
+                user: (req as any).user._id,
+                amount: totalPrice,
+                paymentMethod: "upi",
+                paymentStatus: "pending",
+                stripeSessionId: session.id
+            });
+            
+            // clear only current user's cart
+            await Cart.updateOne(
+                { user: (req as any).user._id },
+                { $set: { items: [] } }
+            );
+
+            res.status(201).json({
+                success: true,
+                message: "Order created successfully",
+                data: session.url
+            });
+        }
 
     } catch (error) {
         res.status(500).json({
