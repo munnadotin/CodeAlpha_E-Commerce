@@ -1,15 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../../app/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getOrdersThunk } from "../../api/orderThunk";
 import CirLoader from "../Loader";
 import { Package, ChevronRight, Calendar, Truck, CheckCircle, Clock } from "lucide-react";
+import OrderDetails from "../OrderDetails";
 
 export default function OrderContent() {
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
     const { ordersList, loading } = useSelector((state: RootState) => state.orders);
+    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+    const [showOrderDetails, setShowOrderDetails] = useState(false);
 
     useEffect(() => {
         dispatch(getOrdersThunk());
@@ -159,7 +161,10 @@ export default function OrderContent() {
                                 {/* Order Footer */}
                                 <div className="bg-gray-50/20 px-5 py-3 border-t border-gray-100 flex justify-end">
                                     <button
-                                        onClick={() => navigate(`/orders/${order._id}`)}
+                                        onClick={() => {
+                                            setShowOrderDetails(prev => !prev);
+                                            setSelectedOrderId(order._id);
+                                        }}
                                         className="text-sm text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1 group cursor-pointer"
                                     >
                                         View Order Details
@@ -171,6 +176,12 @@ export default function OrderContent() {
                     </div>
                 )}
             </div>
+            {showOrderDetails && (
+                <OrderDetails
+                    orderId={selectedOrderId}
+                    onClose={() => setShowOrderDetails(false)}
+                />
+            )}
         </div>
     );
 }
