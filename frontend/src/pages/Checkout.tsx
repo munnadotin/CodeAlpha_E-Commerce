@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../app/store";
 import { useState } from "react";
-import { createOrderThunk } from "../api/orderThunk";
+import { createCardOrderThunk, createOrderThunk } from "../api/orderThunk";
 import { useNavigate } from "react-router-dom";
 
 function Checkout() {
@@ -15,7 +15,8 @@ function Checkout() {
   const handlePlaceOrder = async () => {
     if (paymentMethod === "upi") {
       // Handle UPI payment
-      console.log("upi payment confirmed");
+      const res = await dispatch(createCardOrderThunk(paymentMethod as 'upi')).unwrap();
+      window.location.href = res?.data;
     } else {
       await dispatch(createOrderThunk(paymentMethod as 'cod'));
       // Redirect to order confirmation or success page

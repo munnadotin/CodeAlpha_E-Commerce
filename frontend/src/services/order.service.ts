@@ -33,3 +33,13 @@ export const getOrderByIdService = async (orderId: string) => {
     })
     return response
 }
+
+export const createCardOrderService = async (paymentMethod: 'upi' | 'cod') => {
+    const response = await apiRequest({
+        method: "POST",
+        url: ENDPOINTS.ORDER.CREATE,
+        data: { paymentMethod },
+        params: {}
+    })
+    return response
+}

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { createOrderService, getOrderByIdService, getOrdersService } from "../services/order.service";
+import { createCardOrderService, createOrderService, getOrderByIdService, getOrdersService } from "../services/order.service";
 
 export const getOrdersThunk = createAsyncThunk("orders/get", async (_, thunkApi) => {
     try {
@@ -27,6 +27,17 @@ export const createOrderThunk = createAsyncThunk("orders/create", async (payment
 export const getOrderByIdThunk = createAsyncThunk("orders/getById", async (orderId: string, thunkApi) => {
     try {
         return await getOrderByIdService(orderId);
+    } catch (error: any) {
+        toast.error(error.message);
+        return thunkApi.rejectWithValue({
+            message: error.message
+        });
+    }
+});
+
+export const createCardOrderThunk = createAsyncThunk("orders/createCard", async (paymentMethod: 'cod' | 'upi', thunkApi) => {
+    try {
+        return await createCardOrderService(paymentMethod);
     } catch (error: any) {
         toast.error(error.message);
         return thunkApi.rejectWithValue({

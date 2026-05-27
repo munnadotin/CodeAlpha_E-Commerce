@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createOrderThunk, getOrderByIdThunk, getOrdersThunk } from "../api/orderThunk";
+import { createCardOrderThunk, createOrderThunk, getOrderByIdThunk, getOrdersThunk } from "../api/orderThunk";
 import type { OrdersType } from "../types/orders.type";
 
 const initialState = {
     ordersList: [] as OrdersType[],
     currentOrder: null as OrdersType | null,
+    cardOrder: "",
     loading: false,
     error: null as string | null,
 }
@@ -38,7 +39,23 @@ const orderSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             })
-            
+
+            // Create card order
+            .addCase(createCardOrderThunk.pending, (state) => {
+                state.loading = true;
+            })
+
+            .addCase(createCardOrderThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                console.log(action.payload.data)
+                state.cardOrder = action.payload.data;
+            })
+
+            .addCase(createCardOrderThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+
             // Get order by id
             .addCase(getOrderByIdThunk.fulfilled, (state, action) => {
                 state.loading = false;
