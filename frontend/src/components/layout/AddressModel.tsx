@@ -1,15 +1,61 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form"
-import type { address } from "../../types/auth.type";
+import type { Address } from "../../types/auth.type";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../app/store";
+import { addAddressThunk, updateAddressThunk } from "../../api/authThunk";
 
-function AddressModel({ setActiveModel }: { setActiveModel: (active: boolean) => void }) {
-    const { register, handleSubmit } = useForm();
+function AddressModel({ onClose, address }: { onClose: () => void, address: Address }) {
+    const { register, handleSubmit, reset } = useForm<Address>({
+        defaultValues: {
+            city: "",
+            country: "",
+            state: "",
+            street: "",
+            zipCode: ""
+        }
+    });
+    const dispatch = useDispatch<AppDispatch>();
 
-    const onsubmit = (data: address) => {
-        console.log(data)
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, []);
+    useEffect(() => {
+        if (address) {
+            reset({
+                city: address.city,
+                country: address.country,
+                state: address.state,
+                street: address.street,
+                zipCode: address.zipCode
+            })
+        } else {
+            reset({
+                city: "",
+                country: "",
+                state: "",
+                street: "",
+                zipCode: ""
+            })
+        }
+    }, [reset, address])
+
+    const onsubmit = async (data: Address) => {
+        if (address) {
+            await dispatch(updateAddressThunk({ addressId: address._id, data }));
+        } else {
+            await dispatch(addAddressThunk(data));
+        }
+        reset();
+        onClose();
     }
+
     return (
-        <form onSubmit={handleSubmit(onsubmit)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden animate-in fade-in duration-200">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 animate-in zoom-in-95 duration-200">
+        <form onClick={onClose} onSubmit={handleSubmit(onsubmit)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden animate-in fade-in duration-200">
+            <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 animate-in zoom-in-95 duration-200">
 
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-100">
@@ -95,7 +141,7 @@ function AddressModel({ setActiveModel }: { setActiveModel: (active: boolean) =>
                     </button>
                     <button
                         type="button"
-                        onClick={() => setActiveModel(false)}
+                        onClick={onClose}
                         className="flex-1 rounded-lg bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-700 transition-all hover:bg-gray-200 cursor-pointer"
                     >
                         Cancel

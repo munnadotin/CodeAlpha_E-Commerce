@@ -1,7 +1,10 @@
 import { useState } from "react";
-import type { User } from "../../types/auth.type"
+import type { Address, User } from "../../types/auth.type"
 import AddressModel from "./AddressModel";
 import { SquarePen, Trash2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../app/store";
+import { deleteAddressThunk } from "../../api/authThunk";
 
 interface ProfileContentProps {
     user: User
@@ -9,7 +12,9 @@ interface ProfileContentProps {
 
 function ProfileContent({ user }: ProfileContentProps) {
     if (!user) return null;
+    const dispatch = useDispatch<AppDispatch>();
     const [activeModel, setActiveModel] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
@@ -38,34 +43,43 @@ function ProfileContent({ user }: ProfileContentProps) {
                         </label>
 
                         {user.address && user.address.length > 0 ? (
-                            <div className="space-y-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {user.address.map((address, index) => (
                                     <div
                                         key={index}
-                                        className="rounded-xl flex items-start justify-between border border-gray-200 bg-white p-4 transition"
+                                        className="border border-slate-300 rounded-xl p-4 bg-white"
                                     >
-                                        <div className="flex flex-col gap-2">
-                                            <p className="text-sm font-medium text-gray-900">
-                                                {address.street}
-                                            </p>
+                                        <div className="flex items-start justify-between">
+                                            <div className="flex-1">
+                                                <p className="text-sm font-medium text-gray-900">
+                                                    {address.street}
+                                                </p>
+                                                <p className="text-sm text-gray-600 mt-1">
+                                                    {address.city}, {address.state} - {address.zipCode}
+                                                </p>
+                                                <p className="text-sm text-gray-500 mt-0.5">
+                                                    {address.country}
+                                                </p>
+                                            </div>
 
-                                            <p className="mt-1 text-sm text-gray-600">
-                                                {address.city}, {address.state} - {address.zipCode}
-                                            </p>
-
-                                            <p className="text-sm text-gray-500">
-                                                {address.country}
-                                            </p>
+                                            <div className="flex items-center gap-2 ml-3">
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedAddress(address);
+                                                        setActiveModel(true);
+                                                    }}
+                                                    className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition cursor-pointer"
+                                                >
+                                                    <SquarePen strokeWidth={1.5} className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => dispatch(deleteAddressThunk(address._id))}
+                                                    className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition cursor-pointer"
+                                                >
+                                                    <Trash2 strokeWidth={1.5} className="w-4 h-4" />
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <button className="p-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition cursor-pointer">
-                                                <Trash2 strokeWidth={1.5} className="w-4 h-4" />
-                                            </button>
-                                            <button className="p-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition cursor-pointer">
-                                                <SquarePen strokeWidth={1.5} className="w-4 h-4" />
-                                            </button>
-                                        </div>
-
                                     </div>
                                 ))}
                             </div>
@@ -89,7 +103,12 @@ function ProfileContent({ user }: ProfileContentProps) {
                 }
 
                 {/* popup model */}
-                {activeModel && (<AddressModel setActiveModel={setActiveModel} />)}
+                {activeModel && (<AddressModel
+                    address={selectedAddress}
+                    onClose={() => {
+                        setActiveModel(false);
+                    }}
+                />)}
             </div>
         </div>
     )

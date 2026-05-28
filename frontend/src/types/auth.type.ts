@@ -3,10 +3,11 @@ export interface User {
     name: string;
     email: string;
     role: "admin" | "user";
-    address: address[]
+    address: Address[]
 }
 
-export interface address {
+export interface Address {
+    _id: string;
     street: string;
     city: string;
     state: string;

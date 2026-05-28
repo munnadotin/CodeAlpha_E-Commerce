@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginThunk } from "../api/authThunk";
+import { addAddressThunk, deleteAddressThunk, loginThunk, updateAddressThunk } from "../api/authThunk";
 
 const initialState = {
     user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null,
@@ -25,12 +25,34 @@ const authSlice = createSlice({
                 state.loading = true;
             })
 
+            // full user + address details
             .addCase(loginThunk.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload.user;
                 state.token = action.payload.accessToken;
                 localStorage.setItem("user", JSON.stringify(action.payload.user));
                 localStorage.setItem("token", action.payload.accessToken);
+            })
+
+            // add address
+            .addCase(addAddressThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload.user;
+                localStorage.setItem("user", JSON.stringify(action.payload.user));
+            })
+
+            // update address
+            .addCase(updateAddressThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload.user;
+                localStorage.setItem("user", JSON.stringify(action.payload.user));
+            })
+
+            // delete address
+            .addCase(deleteAddressThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload.user;
+                localStorage.setItem("user", JSON.stringify(action.payload.user));
             })
 
             .addCase(loginThunk.rejected, (state, action) => {

@@ -2,9 +2,9 @@ export const ENDPOINTS = {
     AUTH: {
         LOGIN: "/auth/login",
         REGISTER: "/auth/register",
-        ADD_ADDRESS: "/auth/address",
-        UPDATE_ADDRESS: "/auth/address",
-        DELETE_ADDRESS: "/auth/address",
+        ADD_ADDRESS: "/auth/add-address",
+        UPDATE_ADDRESS: "/auth/update-address",
+        DELETE_ADDRESS: "/auth/delete-address",
     },
     PRODUCTS: {
         ALL: "/products",
