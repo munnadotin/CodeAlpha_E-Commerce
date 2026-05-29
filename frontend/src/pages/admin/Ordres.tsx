@@ -157,7 +157,7 @@ function Orders() {
 
                   <button
                     onClick={() => setUpdateOrder(order)}
-                    className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition"
+                    className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition cursor-pointer"
                   >
                     Update Order
                     <Edit className="w-3 h-3" />
@@ -165,7 +165,7 @@ function Orders() {
 
                   <button
                     onClick={() => setSelectedOrder(order)}
-                    className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition"
+                    className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition cursor-pointer"
                   >
                     View Details
                     <Eye className="w-3 h-3" />
