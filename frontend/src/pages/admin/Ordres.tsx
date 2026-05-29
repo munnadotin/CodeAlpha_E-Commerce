@@ -2,15 +2,18 @@ import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../app/store"
 import { useEffect, useState } from "react";
 import { getAdminOrdersThunk } from "../../api/orderThunk";
-import { Package, Eye, Calendar, Truck, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { Package, Eye, Calendar, Truck, CheckCircle, Clock, AlertCircle, Edit } from "lucide-react";
 import OrderDetails from "../../components/OrderDetails";
 import CirLoader from "../../components/Loader";
+import type { OrdersType } from "../../types/orders.type";
+import UpdateOrder from "../../components/UpdateOrder";
 
 function Orders() {
   const { ordersList, loading } = useSelector((state: RootState) => state.orders);
   const dispatch = useDispatch<AppDispatch>();
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState<null | OrdersType>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [updateOrder, setUpdateOrder] = useState<null | OrdersType>(null);
 
   useEffect(() => {
     dispatch(getAdminOrdersThunk());
@@ -153,6 +156,14 @@ function Orders() {
                   </div>
 
                   <button
+                    onClick={() => setUpdateOrder(order)}
+                    className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition"
+                  >
+                    Update Order
+                    <Edit className="w-3 h-3" />
+                  </button>
+
+                  <button
                     onClick={() => setSelectedOrder(order)}
                     className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition"
                   >
@@ -171,6 +182,15 @@ function Orders() {
         <OrderDetails
           orderId={selectedOrder._id}
           onClose={() => setSelectedOrder(null)}
+        />
+      )}
+
+      {/* Update order */}
+      {updateOrder && (
+        <UpdateOrder
+          update={statusOptions}
+          order={updateOrder}
+          onClose={() => setUpdateOrder(null)}
         />
       )}
     </>
