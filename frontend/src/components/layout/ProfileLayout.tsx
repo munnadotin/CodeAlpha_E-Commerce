@@ -4,13 +4,15 @@ import ProfileContent from "./ProfileContent";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import OrderContent from "./OrderContent";
+import Ordres from "../../pages/admin/Ordres";
+import Product from "../../pages/admin/Product";
 
 const ProfileLayout = () => {
     const [activeTab, setActiveTab] = useState('profile');
     const { user } = useSelector((state: RootState) => state.auth);
 
     return (
-        <div className="min-h-screen py-10 px-4">
+        <div className="min-h-[calc(100vh-200px)] py-10 px-4">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
@@ -24,7 +26,11 @@ const ProfileLayout = () => {
                     {/* Card */}
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                            <ProfileCard user={user} activeTab={activeTab} setActiveTab={setActiveTab} />
+                            <ProfileCard
+                                user={user}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
                         </div>
                     </div>
 
@@ -32,6 +38,8 @@ const ProfileLayout = () => {
                     <div className="lg:col-span-3">
                         {activeTab === 'profile' && <ProfileContent user={user} />}
                         {activeTab === 'my orders' && <OrderContent />}
+                        {activeTab === 'orders' && <Ordres />}
+                        {activeTab === 'products' && <Product />}
                     </div>
                 </div>
             </div>

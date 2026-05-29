@@ -1,4 +1,4 @@
-import { Cuboid, Handbag, LogOut, User2 } from "lucide-react";
+import { Cuboid, Handbag, LogOut, Package2, User2 } from "lucide-react";
 import type { User } from "../../types/auth.type";
 import { useDispatch } from "react-redux";
 import { clearUser } from "../../features/authSlice";
@@ -37,6 +37,13 @@ const ProfileCard = ({ activeTab, setActiveTab, user }: ActiveTabType) => {
             role: ['admin'],
             icon: <Cuboid strokeWidth={1.5} className="w-5 h-5" />,
             onClick: () => setActiveTab('admin')
+        },
+        {
+            id: 4,
+            name: 'Orders',
+            role: ['admin'],
+            icon: <Package2 strokeWidth={1.5} className="w-5 h-5" />,
+            onClick: () => setActiveTab('orders')
         }
     ];
 

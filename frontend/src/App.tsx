@@ -31,16 +31,19 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Route>
+
+          <Route index path="/" element={<Home />} />
+          <Route path="/product/:slug" element={<ProductDetail />} />
+          <Route path="/products/category/:slug" element={<Products />} />
+          <Route path="/products/search" element={<SearchProduct />} />
+
           <Route element={<ProudectedRoute allowedRoles={["user"]} />}>
-            <Route index path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/product/:slug" element={<ProductDetail />} />
-            <Route path="/products/category/:slug" element={<Products />} />
-            <Route path="/products/search" element={<SearchProduct />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/checkout/order-success" element={<OrderSuccess />} />
             <Route path="/checkout/order-cancel" element={<OrderCancel />} />
           </Route>
+
           <Route element={<ProudectedRoute allowedRoles={["user", "admin"]} />}>
             <Route path="/profile" element={<Profile />} />
           </Route>

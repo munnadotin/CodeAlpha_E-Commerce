@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
-import { useDispatch } from 'react-redux';
-import type { AppDispatch } from '../app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../app/store';
 import { addCartItemThunk, cartThunk } from '../api/cartThunk';
 import type { Product } from '../types/product.type';
 import toast from 'react-hot-toast';
 
 const ProductCard = ({ product }: { product: Product }) => {
+    const { user } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch<AppDispatch>();
     const [isHovered, setIsHovered] = useState(false);
     const [currentImage, setCurrentImage] = useState(0);
@@ -66,6 +67,10 @@ const ProductCard = ({ product }: { product: Product }) => {
                 {/* Add to Cart Button */}
                 <button
                     onClick={() => {
+                        if (!user) {
+                            toast.error("Please login to add items to cart");
+                            return;
+                        }
                         dispatch(addCartItemThunk({ productId: product._id, quantity: 1 }));
                         dispatch(cartThunk());
                         toast.success("Item added into cart successfully");

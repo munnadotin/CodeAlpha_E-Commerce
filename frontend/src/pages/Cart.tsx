@@ -52,7 +52,7 @@ const Cart = () => {
           </div>
         ) : isCartEmpty ? (
           // Empty Cart State
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+          <div className="bg-white rounded-xl border-2 border-slate-300 p-12 text-center">
             <div className="max-w-md mx-auto">
               <ShoppingBag strokeWidth={1.5} className="w-16 h-16 mx-auto text-gray-300 mb-6" />
               <h2 className="text-2xl font-light text-gray-900 mb-2">

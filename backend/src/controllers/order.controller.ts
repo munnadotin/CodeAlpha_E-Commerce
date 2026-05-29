@@ -78,7 +78,7 @@ const createOrder = async (req: Request, res: Response) => {
                 paymentStatus: "pending",
                 stripeSessionId: session.id
             });
-            
+
             // clear only current user's cart
             await Cart.updateOne(
                 { user: (req as any).user._id },
@@ -173,7 +173,7 @@ const updateOrder = async (req: Request, res: Response) => {
     }
 }
 
-const getAllOrders = async (req: Request, res: Response) => {
+const getAllOrders = async (_req: Request, res: Response) => {
     try {
         const orders = await Order.find();
 

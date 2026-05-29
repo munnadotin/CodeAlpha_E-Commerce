@@ -19,5 +19,6 @@ export const ENDPOINTS = {
     }, 
     ORDER: {
         CREATE: "/orders",
+        ADMIN: "/orders/admin",
     }
 };

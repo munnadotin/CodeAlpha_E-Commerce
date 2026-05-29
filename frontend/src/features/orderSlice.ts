@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createCardOrderThunk, createOrderThunk, getOrderByIdThunk, getOrdersThunk } from "../api/orderThunk";
+import { createCardOrderThunk, createOrderThunk, getAdminOrdersThunk, getOrderByIdThunk, getOrdersThunk } from "../api/orderThunk";
 import type { OrdersType } from "../types/orders.type";
 
 const initialState = {
@@ -16,11 +16,19 @@ const orderSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            // get orders only user
             .addCase(getOrdersThunk.pending, (state) => {
                 state.loading = true;
             })
+
             // Get all orders
             .addCase(getOrdersThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.ordersList = action.payload.data;
+            })
+
+            // Get admin orders
+            .addCase(getAdminOrdersThunk.fulfilled, (state, action) => {
                 state.loading = false;
                 state.ordersList = action.payload.data;
             })

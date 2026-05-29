@@ -84,10 +84,12 @@ const Navbar = () => {
 
           {/* action */}
           <div className="relative flex items-center gap-4">
-            <button onClick={() => navigate('/cart')} type='button' className='p-2 border border-slate-300 rounded-md shadow-xs cursor-pointer relative'>
-              <Handbag strokeWidth={1.5} className='h-5 w-5' />
-              <div className='absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>{products?.items?.length || 0}</div>
-            </button>
+            {user && user.role !== "admin" && (
+              <button onClick={() => navigate('/cart')} type='button' className='p-2 border border-slate-300 rounded-md shadow-xs cursor-pointer relative'>
+                <Handbag strokeWidth={1.5} className='h-5 w-5' />
+                <div className='absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>{products?.items?.length || 0}</div>
+              </button>
+            )}
             {user ? (
               <button onClick={() => navigate('/profile')} className='flex items-center gap-2 px-4 py-1.5 border border-slate-300 rounded-md shadow-xs cursor-pointer'>
                 <User2 strokeWidth={1.5} className='h-5 w-5' /> <span className='hidden lg:block'>Profile</span>
@@ -123,18 +125,20 @@ const Navbar = () => {
           </button>
 
           {/* Cart */}
-          <button
-            onClick={() => navigate('/cart')}
-            className="relative flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
-          >
-            <Handbag strokeWidth={1.5} className="h-5 w-5" />
-            <span className="text-xs">Cart</span>
-            {(products?.items?.length > 0) && (
-              <div className="absolute -top-1 -right-2 bg-gray-900 text-white text-[10px] font-medium rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
-                {products.items.length}
-              </div>
-            )}
-          </button>
+          {user && user.role !== "admin" && (
+            <button
+              onClick={() => navigate('/cart')}
+              className="relative flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+            >
+              <Handbag strokeWidth={1.5} className="h-5 w-5" />
+              <span className="text-xs">Cart</span>
+              {(products?.items?.length > 0) && (
+                <div className="absolute -top-1 -right-2 bg-gray-900 text-white text-[10px] font-medium rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
+                  {products.items.length}
+                </div>
+              )}
+            </button>
+          )}
 
           {/* Profile / Login */}
           {user ? (

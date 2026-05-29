@@ -14,6 +14,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
   const { loading, productDetails } = useSelector((state: RootState) => state.products);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(productBySlugThunk(slug!));
@@ -211,6 +212,10 @@ const ProductDetail = () => {
             {/* Add to Cart Button */}
             <button
               onClick={() => {
+                if (!user) {
+                  toast.error("Please login to add items to cart");
+                  return;
+                }
                 dispatch(addCartItemThunk({ productId: productDetails._id, quantity }));
                 toast.success("Item added into cart successfully");
               }}
