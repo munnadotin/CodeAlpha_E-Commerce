@@ -18,8 +18,6 @@ const Home = () => {
     dispatch(categoryThunk());
   }, []);
 
-  console.log(products);
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -168,10 +166,10 @@ const Home = () => {
             <h2 className="text-3xl md:text-4xl font-light text-gray-900">Trending <span className="font-semibold">Now</span></h2>
             <p className="text-gray-500 mt-2">Most popular products this week</p>
           </div>
-          <Link to="/trending" className="text-gray-600 hover:text-gray-900 font-medium flex items-center gap-1 group">
+          {/* <Link to="/products" className="text-gray-600 hover:text-gray-900 font-medium flex items-center gap-1 group">
             View All
             <ChevronRight strokeWidth={1.5} className='h-4 w-4 group-hover:translate-x-1 transition-transform' />
-          </Link>
+          </Link> */}
         </div>
 
         {loading ? <Loader /> : (

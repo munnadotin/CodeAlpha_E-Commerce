@@ -11,10 +11,10 @@ interface ProfileContentProps {
 }
 
 function ProfileContent({ user }: ProfileContentProps) {
-    if (!user) return null;
     const dispatch = useDispatch<AppDispatch>();
     const [activeModel, setActiveModel] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+    if (!user) return null;
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">

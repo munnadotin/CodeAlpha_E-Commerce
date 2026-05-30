@@ -179,55 +179,55 @@ const ProductDetail = () => {
             </div>
 
             {/* Quantity Selector */}
-            <div className="mb-8">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Quantity
-              </label>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    disabled={quantity <= 1}
-                    className="px-4 py-2 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="w-12 text-center font-medium text-gray-900">
-                    {quantity}
+            {user.role !== "admin" && (
+              < div className="mb-8">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Quantity
+                </label>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      disabled={quantity <= 1}
+                      className="px-4 py-2 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-12 text-center font-medium text-gray-900">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => setQuantity(Math.min(productDetails.stock, quantity + 1))}
+                      disabled={quantity >= productDetails.stock}
+                      className="px-4 py-2 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <span className="text-xs text-gray-400">
+                    Max {productDetails.stock} units
                   </span>
-                  <button
-                    onClick={() => setQuantity(Math.min(productDetails.stock, quantity + 1))}
-                    disabled={quantity >= productDetails.stock}
-                    className="px-4 py-2 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
                 </div>
-                <span className="text-xs text-gray-400">
-                  Max {productDetails.stock} units
-                </span>
               </div>
-            </div>
+            )}
 
             {/* Add to Cart Button */}
-            <button
-              onClick={() => {
-                if (!user) {
-                  toast.error("Please login to add items to cart");
-                  return;
-                }
-                dispatch(addCartItemThunk({ productId: productDetails._id, quantity }));
-                toast.success("Item added into cart successfully");
-              }}
-              disabled={productDetails.stock === 0}
-              className={`flex items-center justify-center gap-3 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${productDetails.stock > 0
-                ? 'bg-gray-900 text-white hover:bg-gray-800 active:scale-98'
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                }`}
-            >
-              <ShoppingCart className="w-5 h-5" />
-              <span>{productDetails.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</span>
-            </button>
+            {user.role !== "admin" && (
+              <button
+                onClick={() => {
+                  if (!user) {
+                    toast.error("Please login to add items to cart");
+                    return;
+                  }
+                  dispatch(addCartItemThunk({ productId: productDetails._id, quantity }));
+                  toast.success("Item added into cart successfully");
+                }}
+                disabled={productDetails.stock === 0}
+                className={`flex items-center justify-center gap-3 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${productDetails.stock > 0 ? 'bg-gray-900 text-white hover:bg-gray-800 active:scale-98' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}>
+                <ShoppingCart className="w-5 h-5" />
+                <span>{productDetails.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</span>
+              </button>
+            )}
 
             {/* Delivery Info Cards */}
             <div className="mt-8 pt-6 border-t border-gray-100">
@@ -252,7 +252,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

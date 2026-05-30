@@ -2,7 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { category } from "../types/category.type";
 import { categoryThunk } from "../api/categoryThunk";
 
-const initialState = {
+const initialState: {
+    categories: category[];
+    loading: boolean;
+    error: string | null;
+} = {
     categories: [] as category[],
     loading: false,
     error: null
@@ -23,7 +27,7 @@ const categorySlice = createSlice({
                 state.loading = false;
             })
             .addCase(categoryThunk.rejected, (state, action) => {
-                state.error = action.error.message;
+                state.error = action.error.message || null;
                 state.loading = false;
             })
     }

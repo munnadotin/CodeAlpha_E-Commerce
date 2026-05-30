@@ -11,7 +11,7 @@ function ProductPage() {
     const { products, loading } = useSelector((state: RootState) => state.products);
     const dispatch = useDispatch<AppDispatch>();
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<Product>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleCreateProduct = async (formData: FormData) => {
@@ -30,7 +30,7 @@ function ProductPage() {
     const handleUpdateProduct = async (formData: FormData) => {
         setIsSubmitting(true);
         try {
-            await dispatch(updateProductThunk({ productId: selectedProduct.slug, data: formData as any }));
+            await dispatch(updateProductThunk({ productId: selectedProduct!.slug, data: formData as any }));
             await dispatch(productThunk());
             setSelectedProduct(null);
         } catch (error) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import type { AppDispatch, RootState } from "../app/store";
@@ -13,13 +13,11 @@ export default function Products() {
     const { slug } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-    const { categoryProducts, pagination, loading, error } = useSelector((state: RootState) => state.products);
-
-    const [currentPage, setCurrentPage] = useState(1);
+    const { categoryProducts, loading, error } = useSelector((state: RootState) => state.products);
 
     useEffect(() => {
         dispatch(productByCategoryThunk(slug!));
-    }, [slug, currentPage, dispatch]);
+    }, [slug, dispatch]);
 
     const categoryName = slug;
     const totalProducts = categoryProducts.length;
@@ -66,7 +64,7 @@ export default function Products() {
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16">
                 {/* Filters and Sorting Bar */}
-                
+
                 {/* Products */}
                 {categoryProducts.length === 0 ? (
                     <div className="text-center py-20">

@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addAddressThunk, deleteAddressThunk, loginThunk, updateAddressThunk } from "../api/authThunk";
 
-const initialState = {
+const initialState: {
+    user: any;
+    token: string | null;
+    loading: boolean;
+    error: string | null;
+} = {
     user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null,
     token: localStorage.getItem("token"),
     loading: false,
@@ -57,7 +62,7 @@ const authSlice = createSlice({
 
             .addCase(loginThunk.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = (action.payload as { message: string })?.message || null;
             })
     }
 });

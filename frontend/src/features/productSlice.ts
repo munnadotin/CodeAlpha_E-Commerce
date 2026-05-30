@@ -40,12 +40,12 @@ const productSlice = createSlice({
             })
             .addCase(searchProductThunk.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.error.message || null;
             })
 
             .addCase(productThunk.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.error.message || null;
             })
 
             // single product
@@ -58,7 +58,7 @@ const productSlice = createSlice({
             })
             .addCase(productBySlugThunk.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.error.message || null;
             })
 
             // category products
@@ -73,7 +73,7 @@ const productSlice = createSlice({
             })
             .addCase(productByCategoryThunk.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.error.message || null;
             })
     }
 })

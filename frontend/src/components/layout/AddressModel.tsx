@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../app/store";
 import { addAddressThunk, updateAddressThunk } from "../../api/authThunk";
 
-function AddressModel({ onClose, address }: { onClose: () => void, address: Address }) {
+function AddressModel({ onClose, address }: { onClose: () => void, address: Address | null }) {
     const { register, handleSubmit, reset } = useForm<Address>({
         defaultValues: {
             city: "",

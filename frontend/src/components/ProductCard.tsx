@@ -65,20 +65,22 @@ const ProductCard = ({ product }: { product: Product }) => {
                 </div>
 
                 {/* Add to Cart Button */}
-                <button
-                    onClick={() => {
-                        if (!user) {
-                            toast.error("Please login to add items to cart");
-                            return;
-                        }
-                        dispatch(addCartItemThunk({ productId: product._id, quantity: 1 }));
-                        dispatch(cartThunk());
-                        toast.success("Item added into cart successfully");
-                    }}
-                    className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
-                    <ShoppingCart strokeWidth={1.5} className='h-5 w-5' />
-                    Add to Cart
-                </button>
+                {user.role !== "admin" && (
+                    <button
+                        onClick={() => {
+                            if (!user) {
+                                toast.error("Please login to add items to cart");
+                                return;
+                            }
+                            dispatch(addCartItemThunk({ productId: product._id, quantity: 1 }));
+                            dispatch(cartThunk());
+                            toast.success("Item added into cart successfully");
+                        }}
+                        className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
+                        <ShoppingCart strokeWidth={1.5} className='h-5 w-5' />
+                        Add to Cart
+                    </button>
+                )}
             </div>
         </div>
     );

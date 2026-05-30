@@ -10,7 +10,7 @@ import OrderDetails from "../OrderDetails";
 export default function OrderContent() {
     const dispatch = useDispatch<AppDispatch>();
     const { ordersList, loading } = useSelector((state: RootState) => state.orders);
-    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+    const [selectedOrderId, setSelectedOrderId] = useState<string>('');
     const [showOrderDetails, setShowOrderDetails] = useState(false);
 
     useEffect(() => {
