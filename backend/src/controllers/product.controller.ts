@@ -178,13 +178,7 @@ const deleteProduct = async (req: Request, res: Response) => {
 
         // check ownership
         const product = await Product.findOne({ slug: slug as string });
-        if (product?.createdby?.toString() !== (req as any).user._id.toString()) {
-            return res.status(403).json({
-                success: false,
-                message: "You are not authorized to delete this product",
-            });
-        }
-
+       
         const deletedProduct = await Product.findOneAndDelete({ slug: slug as string });
 
         if (!deletedProduct) {

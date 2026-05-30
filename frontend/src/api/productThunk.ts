@@ -1,6 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { productServer, productBySlugServer, productByCategoryServer, searchProduct } from "../services/product.server";
+import { productServer, productBySlugServer, productByCategoryServer, searchProduct, createProductServer, deleteProductServer, updateProductServer } from "../services/product.server";
 import toast from "react-hot-toast";
+
+type updateProduct = {
+    productId: string;
+    data: FormData;
+}
 
 export const productThunk = createAsyncThunk("products/getAll", async (_, thunkAPI) => {
     try {
@@ -38,6 +43,39 @@ export const productByCategoryThunk = createAsyncThunk("products/getByCategory",
 export const searchProductThunk = createAsyncThunk("product/search", async (query: string, thunkAPI) => {
     try {
         return await searchProduct(query);
+    } catch (error: any) {
+        toast.error(error.message);
+        return thunkAPI.rejectWithValue({
+            message: error.message
+        });
+    }
+})
+
+export const createProductThunk = createAsyncThunk("/products/create", async (data: FormData, thunkAPI) => {
+    try {
+        return await createProductServer(data);
+    } catch (error: any) {
+        toast.error(error.message);
+        return thunkAPI.rejectWithValue({
+            message: error.message
+        });
+    }
+})
+
+export const updateProductThunk = createAsyncThunk("/product/update", async (data: updateProduct, thunkAPI) => {
+    try {
+        return await updateProductServer(data.productId, data.data);
+    } catch (error: any) {
+        toast.error(error.message);
+        return thunkAPI.rejectWithValue({
+            message: error.message
+        });
+    }
+})
+
+export const deleteProductThunk = createAsyncThunk("/products/delete", async (productId: string, thunkAPI) => {
+    try {
+        return await deleteProductServer(productId);
     } catch (error: any) {
         toast.error(error.message);
         return thunkAPI.rejectWithValue({

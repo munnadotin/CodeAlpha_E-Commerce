@@ -40,3 +40,34 @@ export const productByCategoryServer = async (category: string) => {
     })
     return response;
 }
+
+export const createProductServer = async (data: FormData) => {
+    const response = await apiRequest({
+        method: "POST",
+        url: ENDPOINTS.PRODUCTS.CREATE,
+        data: data,
+        params: {}
+    })
+    return response;
+}
+
+export const updateProductServer = async (productId: string, data: FormData) => {
+    const response = await apiRequest({
+        method: "PATCH",
+        url: `${ENDPOINTS.PRODUCTS.BY_ID}/${productId}`,
+        data: data,
+        params: {}
+    })
+    return response;
+}
+
+
+export const deleteProductServer = async (productId: string) => {
+    const response = await apiRequest({
+        method: "DELETE",
+        url: `${ENDPOINTS.PRODUCTS.BY_ID}/${productId}`,
+        data: {},
+        params: {}
+    })
+    return response;
+}
