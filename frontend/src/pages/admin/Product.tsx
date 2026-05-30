@@ -17,7 +17,7 @@ function ProductPage() {
     const handleCreateProduct = async (formData: FormData) => {
         setIsSubmitting(true);
         try {
-            await dispatch(createProductThunk(formData));
+            await dispatch(createProductThunk(formData as any));
             await dispatch(productThunk());
             setShowCreateModal(false);
         } catch (error) {
@@ -30,7 +30,7 @@ function ProductPage() {
     const handleUpdateProduct = async (formData: FormData) => {
         setIsSubmitting(true);
         try {
-            await dispatch(updateProductThunk({ productId: selectedProduct.slug, data: formData }));
+            await dispatch(updateProductThunk({ productId: selectedProduct.slug, data: formData as any }));
             await dispatch(productThunk());
             setSelectedProduct(null);
         } catch (error) {

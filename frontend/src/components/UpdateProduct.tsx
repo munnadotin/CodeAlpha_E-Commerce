@@ -70,7 +70,7 @@ function ProductForm({ onClose, product, onSubmit, isSubmitting = false }: Props
             formData.append("images", file);
         });
 
-        onSubmit(formData);
+        onSubmit(formData as any);
     };
 
     if (loading) return <CirLoader />;
