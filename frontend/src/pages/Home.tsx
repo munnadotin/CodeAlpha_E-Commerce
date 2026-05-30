@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../app/store';
 import { productThunk } from '../api/productThunk';
 import { categoryThunk } from '../api/categoryThunk';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Loader from '../components/ui/Loader';
 
 const Home = () => {
