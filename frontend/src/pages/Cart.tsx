@@ -21,7 +21,7 @@ const Cart = () => {
   const isCartEmpty = !products?.items || products.items.length === 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
+    <div className="min-h-[calc(100vh-200px)] py-10 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
