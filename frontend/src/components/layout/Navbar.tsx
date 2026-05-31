@@ -18,8 +18,10 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    disptach(cartThunk());
-  }, [disptach]);
+    if (user) {
+      disptach(cartThunk());
+    }
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

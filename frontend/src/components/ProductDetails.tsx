@@ -179,7 +179,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Quantity Selector */}
-            {user.role !== "admin" && (
+            {user && user.role !== "admin" && (
               < div className="mb-8">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Quantity
@@ -212,7 +212,7 @@ const ProductDetail = () => {
             )}
 
             {/* Add to Cart Button */}
-            {user.role !== "admin" && (
+            {user && user.role !== "admin" && (
               <button
                 onClick={() => {
                   if (!user) {

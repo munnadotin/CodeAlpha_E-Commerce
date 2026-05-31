@@ -65,7 +65,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 </div>
 
                 {/* Add to Cart Button */}
-                {user.role !== "admin" && (
+                {user && user.role !== "admin" && (
                     <button
                         onClick={() => {
                             if (!user) {
