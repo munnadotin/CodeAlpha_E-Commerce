@@ -16,16 +16,16 @@ const createCheckoutSession = async ({ cartItems, orderId, userId }: { cartItems
         quantity: item.quantity,
     }));
 
-
+    console.log(orderId)
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
 
         line_items: line_items,
         mode: "payment",
 
-        success_url: process.env.CLIENT_URL + "/checkout/order-success",
-        cancel_url: process.env.CLIENT_URL + "/checkout/order-cancel", 
-        
+        success_url: `${process.env.CLIENT_URL}/checkout/order-success?orderId=${orderId}`,
+        cancel_url: `${process.env.CLIENT_URL}/checkout/order-cancel`,
+
         metadata: {
             orderId,
             userId,

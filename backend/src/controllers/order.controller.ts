@@ -62,14 +62,16 @@ const createOrder = async (req: Request, res: Response) => {
                 data: newOrder
             });
         } else {
+            console.log("COD/UPI BLOCK ENTERED");
             newOrder = await Order.create(order);
+            console.log("ORDER CREATED", newOrder._id);
 
             const session = await createCheckoutSession({
                 cartItems: orderItems,
                 orderId: newOrder._id.toString(),
                 userId: (req as any).user._id.toString()
             })
-
+            console.log("SESSION CREATED", session.url);
             await Payment.create({
                 order: newOrder._id,
                 user: (req as any).user._id,
@@ -88,7 +90,10 @@ const createOrder = async (req: Request, res: Response) => {
             res.status(201).json({
                 success: true,
                 message: "Order created successfully",
-                data: session.url
+                data: {
+                    sessionUrl: session.url,
+                    order: newOrder
+                }
             });
         }
 

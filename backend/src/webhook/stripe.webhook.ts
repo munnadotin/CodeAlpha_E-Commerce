@@ -26,19 +26,20 @@ const stripeWebhook = async (req: Request, res: Response) => {
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
         const orderId = session.metadata?.orderId;
-
+        console.log(session.id)
+        console.log(orderId)
         try {
 
             // Payment Update
             await Payment.findOneAndUpdate({ stripeSessionId: session.id }, {
-                status: 'paid',
+                paymentStatus: 'paid',
                 transactionId: session.payment_intent,
-                stripePaymentIntent: session.payment_intent,
-                paymentMethod: new Date(),
+                stripePaymentIntentId: session.payment_intent,
+                paymentDate: new Date(),
             });
 
             // Order Update
-            await Order.findByIdAndUpdate(orderId, { paymentMethod: "paid", orderStatus: "confirmed" });
+            await Order.findByIdAndUpdate(orderId, { paymentStatus: "paid", orderStatus: "confirmed" });
 
             console.log("Order updated successfully");
 

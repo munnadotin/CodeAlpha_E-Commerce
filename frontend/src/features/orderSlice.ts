@@ -5,7 +5,6 @@ import type { OrdersType } from "../types/orders.type";
 const initialState = {
     ordersList: [] as OrdersType[],
     currentOrder: null as OrdersType | null,
-    cardOrder: "",
     loading: false,
     error: null as string | null,
 }
@@ -55,8 +54,8 @@ const orderSlice = createSlice({
 
             .addCase(createCardOrderThunk.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload.data)
-                state.cardOrder = action.payload.data;
+                console.log(action.payload.data);
+                state.currentOrder = action.payload.data.order;
             })
 
             .addCase(createCardOrderThunk.rejected, (state, action) => {
@@ -67,10 +66,11 @@ const orderSlice = createSlice({
             // Get order by id
             .addCase(getOrderByIdThunk.fulfilled, (state, action) => {
                 state.loading = false;
+                console.log(action.payload.data);
                 state.currentOrder = action.payload.data;
             })
 
-            .addCase(getOrdersThunk.rejected, (state, action) => {
+            .addCase(getOrderByIdThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })
